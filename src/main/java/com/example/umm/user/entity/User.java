@@ -17,6 +17,7 @@ public class User {
     private String email;
     private String password;
     private String nickname;
+    private String myComment;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)

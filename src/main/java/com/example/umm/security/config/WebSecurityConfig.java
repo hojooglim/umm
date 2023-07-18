@@ -61,9 +61,9 @@ public class WebSecurityConfig {
                         .rememberMeParameter("remember-me")
                         .tokenValiditySeconds(86400 * 30)
                         .userDetailsService(userDetailsService))
-                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
+                .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(httpRequests -> httpRequests
+                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/user/**").permitAll()
                         .requestMatchers("/").permitAll()
@@ -71,7 +71,6 @@ public class WebSecurityConfig {
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/user/login-page").permitAll());
         return http.build();
-
     }
 }
 

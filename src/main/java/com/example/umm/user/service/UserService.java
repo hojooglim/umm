@@ -1,5 +1,7 @@
 package com.example.umm.user.service;
 
+import com.example.umm.security.filter.UserDetailsImpl;
+import com.example.umm.user.dto.ProfileResponseDto;
 import com.example.umm.user.dto.SignupRequestDto;
 import com.example.umm.user.entity.User;
 import com.example.umm.user.entity.UserRoleEnum;
@@ -26,5 +28,12 @@ public class UserService  {
         String password = passwordEncoder.encode(requestDto.getPassword());
         UserRoleEnum role = UserRoleEnum.USER;
         userRepository.save(new User(requestDto.getEmail(),password,requestDto.getNickname(),role));
+    }
+
+    public ProfileResponseDto findUserProfile(UserDetailsImpl userDetails) {
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(()->
+                new NullPointerException("해당 사용자가 존재하지 않습니다."));
+
+        return new ProfileResponseDto(user);
     }
 }

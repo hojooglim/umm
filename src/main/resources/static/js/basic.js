@@ -6,8 +6,7 @@ $(document).ready(function () {
         $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
             jqXHR.setRequestHeader('Authorization', auth);
         });
-        showProfile();
-        $("#login-button").hide();
+        // showProfile();
     }
     //회원가입
     const signupButton = document.getElementById('signup-btn');
@@ -242,25 +241,24 @@ $(document).ready(function () {
     }
 
     // profile 수정 기능
-    const modifyIntroButton = document.getElementById('modifyIntro-btn');
+    const modifyProfile = document.getElementById('modifyProfile-btn');
 
-    if (modifyIntroButton) {
-        modifyIntroButton.addEventListener('click', event => {
+    if (modifyProfile) {
+        modifyProfile.addEventListener('click', event => {
 
-            fetch(`/introduce`, {
+            fetch(`/profile`, {
                 method: 'PUT',
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     nickname: document.getElementById('nickname').value,
-                    my_content: document.getElementById('mycontent').value
+                    myComment: document.getElementById('myComment').value
                 })
             })
                 .then(() => {
                     alert('수정이 완료되었습니다.');
-
-                    location.replace(`/`);
+                    location.replace(`/profile`);
                 });
         });
     }
@@ -300,6 +298,7 @@ $(document).ready(function () {
     if (newPasswordButton) {
         newPasswordButton.addEventListener('click', event => {
 
+
             fetch(`/password`, {
                 method: 'PUT',
                 headers: {
@@ -315,19 +314,18 @@ $(document).ready(function () {
                 });
         });
     }
-    // 폴더 생성 기능
-    const folderCreateButton = document.getElementById('folderCreate-btn');
+    // 팔로우 기능
+    const followButton = document.getElementById('follow-btn');
 
-    if (folderCreateButton) {
-        folderCreateButton.addEventListener('click', event => {
-            fetch('/folder', {
+    if (followButton) {
+        followButton.addEventListener('click', event => {
+            let id = document.getElementById('user-id').value;
+
+            fetch(`/follow/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    title: document.getElementById('title').value,
-                })
+                }
             })
                 .then(() => {
                     alert('등록 완료되었습니다.');

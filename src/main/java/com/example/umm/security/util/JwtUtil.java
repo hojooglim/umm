@@ -1,29 +1,25 @@
 package com.example.umm.security.util;
 
 
-import com.example.umm.exception.token.JWTVerificationException;
 import com.example.umm.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.security.Key;
-import java.util.Collection;
+import java.util.Base64;
 import java.util.Date;
 
 @Slf4j(topic = "JwtUtil")
-@UtilityClass
+@Component
 public class JwtUtil {
 
     // Header KEY 값
@@ -35,9 +31,17 @@ public class JwtUtil {
     // 토큰 만료시간
     private final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
     //ket 암호화
-    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-    private final Key key = Keys.secretKeyFor(signatureAlgorithm);
+    @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
+    private String secretKey;
+    private Key key;
 
+    @PostConstruct
+    public void init() {
+        byte[] bytes = Base64.getDecoder().decode(secretKey);
+        key = Keys.hmacShaKeyFor(bytes);
+    }
+
+    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     // 토큰 생성
     public String createToken(String email, UserRoleEnum role) {
         Date date = new Date();
@@ -92,20 +96,6 @@ public class JwtUtil {
             }
         }
         return null;
-    }
-
-    // JWT 토큰 인증 정보 조회
-    public Authentication getAuthentication(String token) {
-        Claims claims = getUserInfoFromToken(token);
-
-        Object authoritiesClaim = claims.get(AUTHORIZATION_KEY);
-
-        Collection<? extends GrantedAuthority> authorities = authoritiesClaim == null ? AuthorityUtils.NO_AUTHORITIES
-                : AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim.toString());
-
-        User principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal,token, authorities);
     }
 
     // 토큰에서 사용자 정보 가져오기

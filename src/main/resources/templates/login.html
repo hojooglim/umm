@@ -11,7 +11,7 @@
     <style>
         #login-kakao-btn {
             border-width: 0;
-            margin: 60px 0 8px;
+            margin: 10px 0 8px;
             width: 300px;
             height: 40px;
             flex-grow: 0;
@@ -38,13 +38,10 @@
 <section class="d-flex vh-100">
     <div class="container-fluid row justify-content-center align-content-center">
         <div  style="border-radius: 1rem;">
-            <div class="card-body p-5 text-center">
-                <a class="logo" style="font-weight: 900; color: inherit">Um<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m..</a><br>
-                <div class="mb-3">
-                    <button id="login-kakao-btn" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=af3cc89cbdd26b6503dea63f7578dfbb&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code'">
-                        카카오로 로그인하기 </button>
-                </div>
-                <div class = "mb-2">
+            <div class="card-body p-5 text-center" style="margin-top: 100px">
+                <a class="logo" style="font-weight: 900; color: inherit;">Um<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m..</a><br>
+
+                <div class = "mb-2" style="margin-top: 63px">
                     <div class="mb-3">
                         <input type="text" class="form-control" name="email" id="email" placeholder="사용자 이메일">
                     </div>
@@ -52,10 +49,14 @@
                         <button type="submit" class="btn btn-primary mt-3" style="width: 300px; font-size: 13px" onclick="onLogin()">로그인</button><br>
                 </div>
                 <label>
-                    <input name="remember-me" id="rememberMe" type="checkbox" th:checked="${rememeberMe}"> Remember me
+                    자동 로그인 <input name="remember-me" id="rememberMe" type="checkbox" th:checked="${rememeberMe}">
                 </label>
+                <div class="mb-3">
+                    <button id="login-kakao-btn" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=af3cc89cbdd26b6503dea63f7578dfbb&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code'">
+                        카카오로 로그인하기 </button>
+                </div>
                 <div><br><br><br><br>
-                    <a href="/user/signup-page" class="logo" style="font-weight: 400; color: inherit">새 계정 만들기</a>
+                    <p>계정이 없으신가요? <a href="/user/signup-page" class="logo" style="font-weight: 400; color:dodgerblue">가입하기</a></p>
                 </div>
             </div>
         </div>

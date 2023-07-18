@@ -10,12 +10,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
     <style>
         footer {
-            position: absolute;
-            height: 60px;
-            width: 400px;
-            line-height: 60px;
-            color: #8a8c8f;
-            background-color: white;
+        position: absolute;
+        height: 60px;
+        width: 400px;
+        line-height: 60px;
+        color: #8a8c8f;
+        background-color: white;
         }
         html, body {
             height: 100%
@@ -37,13 +37,31 @@
 
 <body style="margin: 100px auto; width: 400px;">
 
-<header class="p-3" style="text-align: center">
+<header class="p-3">
     <a class="logo" style="font-weight: 900; color: inherit">Umm</a>
+    <a href="/user/login-page" class="logo"  style="float:right; margin-top: 5px; font-size: 13px">로그아웃</a>
 </header>
 
 <div class="container flex-grow-1 p-0" >
 
     <div class="d-flex flex-column">
+
+        <div class="flex-grow-1 p-3" >
+            <p style="font-size: 12px; font-weight: 900; color: inherit">소개글</p>
+            <a href="/user/login-page" class="logo" style="float:right; margin-right: 50px; font-size: 13px">image</a>
+            <p style="font-size: 10px; font-weight: 600; color: inherit">username</p>
+            <p style="font-size: 13px; font-weight: 200; color: inherit">follow 0명</p><br>
+            <button type="button" style="width: 180px; float:left; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/user/introduce'">프로필 수정</button>
+            <button type="button" style="width: 180px; float:right; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/user/introduce'">비밀번호 수정</button><br><br>
+            <table>
+                <tr>
+                    <td><a href="/profile" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">Umm</a>
+                    </td>
+                    <td><a href="/user/login-page" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">저장됨</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
         <div class="p-3 bg-warning">
             umm list

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NewsFeed</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+    <script src="/js/basic.js"></script>
+</head>
+<body>
+<header style="margin: 20px 0 0 50px">
+    <a href="/" class="logo" style="font-weight: 900; color: inherit">쵝오조</a>
+    <div id="login-button">
+        <button type="button" class="btn btn-light" style="float:right; margin-right:57px; font-size: 13px" onclick="location.href='/newsfeed/user/loin-page'">로그인</button><br><br>
+    </div>
+</header><br>
+<div id="profile"></div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <article>
+                <header class="mb-4">
+                    <div type="hidden" th:value="${feed.feedFolderList}">
+                        <div class="row-6" th:each = "folder : ${feed.feedFolderList}">
+                            <textarea type="text" class="form-control" placeholder="폴더" id="folder" th:text="${folder.title}"></textarea>
+                        </div>
+                    </div>
+                </header>
+                <input type="hidden" id="feed-id" th:value="${feed.id}">
+                <header class="mb-4">
+                    <input type="text" class="form-control" placeholder="제목" id="title" th:value="${feed.title}">
+                </header>
+                <section class="mb-5">
+                    <textarea class="form-control h-25" rows="1" placeholder="url" id="url" th:text="${feed.url}"></textarea>
+                </section>
+                <section class="mb-5">
+                    <textarea class="form-control h-25" rows="10" placeholder="내용" id="content" th:text="${feed.contents}"></textarea>
+                </section>
+                <button th:if="${feed.id} != null" type="button" id="modify-btn" class="btn btn-dark">수정</button>
+                <button th:if="${feed.id} != null" type="button" id="delete-btn" class="btn btn-dark">삭제</button>
+                <button th:if="${feed.id} == null" type="button" id="create-btn" class="btn btn-dark">등록</button>
+            </article>
+        </div>
+    </div>
+</div>
+</body>

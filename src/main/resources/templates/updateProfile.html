@@ -10,12 +10,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
     <style>
         footer {
-            position: absolute;
-            height: 60px;
-            width: 400px;
-            line-height: 60px;
-            color: #8a8c8f;
-            background-color: white;
+        position: absolute;
+        height: 60px;
+        width: 400px;
+        line-height: 60px;
+        color: #8a8c8f;
+        background-color: white;
         }
         html, body {
             height: 100%
@@ -34,19 +34,28 @@
         }
     </style>
 </head>
-
 <body style="margin: 100px auto; width: 400px;">
 
-<header class="p-3" style="text-align: center">
-    <a class="logo" style="font-weight: 900; color: inherit">Umm</a>
+<header class="p-3">
+    <a href="/profile" class="logo" style="font-weight: 900; color: inherit">취소</a>
+    <button type="button" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark" id="modifyIntro-btn">완료</button>
 </header>
 
 <div class="container flex-grow-1 p-0" >
 
     <div class="d-flex flex-column">
 
-        <div class="p-3 bg-warning">
-            umm list
+        <div class="flex-grow-1 p-3" >
+            <article>
+                <header class="mb-4">
+                    <label>닉네임</label>
+                    <input type="text" class="form-control" placeholder="+닉네임" id="nickname" th:value="${profile.nickname}">
+                </header>
+                <section class="mb-5">
+                    <label>소개</label>
+                    <textarea class="form-control h-25" rows="10" placeholder="+소개작성" id="myComment" th:text="${profile.myComment}"></textarea>
+                </section>
+            </article>
         </div>
 
     </div>

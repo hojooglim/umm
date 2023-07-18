@@ -4,9 +4,7 @@ package com.example.umm.security.config;
 import com.example.umm.security.filter.JwtAuthenticationFilter;
 import com.example.umm.security.filter.JwtAuthorizationFilter;
 import com.example.umm.security.filter.UserDetailsServiceImpl;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.example.umm.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -16,19 +14,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
+    private final JwtUtil jwtUtil;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -39,14 +34,14 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter();
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
         filter.setAuthenticationManager(authenticationConfiguration.getAuthenticationManager());
         return filter;
     }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter();
+        return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
     }
 
     @Bean
@@ -66,7 +61,6 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/user/**").permitAll()
-                        .requestMatchers("/").permitAll()
                         .anyRequest().authenticated())
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/user/login-page").permitAll());

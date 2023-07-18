@@ -8,6 +8,7 @@
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+    <script src="/js/basic.js"></script>
     <style>
         footer {
         position: absolute;
@@ -32,14 +33,22 @@
             border-bottom: 1px solid #444444;
             padding: 10px;
         }
+        *{margin:0; padding:0;}
+        a{text-decoration:none;}
+        .wrap{padding:10px;}
+
+        .btn_open{font-weight:bold; margin:5px; padding:4px 6px; background:white; color:#fff;}
+        .pop_wrap{position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.5); font-size:0; text-align:center;}
+        .pop_wrap:after{display:inline-block; height:100%; vertical-align:middle; content:'';}
+        .pop_wrap .pop_inner{display:inline-block; padding:20px 30px; background:#fff; width:200px; vertical-align:middle; font-size:15px;}
     </style>
 </head>
 
 <body style="margin: 100px auto; width: 400px;">
 
 <header class="p-3">
-    <a class="logo" style="font-weight: 900; color: inherit">Umm</a>
-    <a href="/user/login-page" class="logo"  style="float:right; margin-top: 5px; font-size: 13px">로그아웃</a>
+    <a class="logo" href="/" style="font-weight: 900; color: inherit">Umm</a>
+    <a href="/user/login-page" class="logo" th:if="__${user_id}__ == null" style="float:right; margin-top: 5px; font-size: 13px">로그아웃</a>
 </header>
 
 <div class="container flex-grow-1 p-0" >
@@ -47,12 +56,16 @@
     <div class="d-flex flex-column">
 
         <div class="flex-grow-1 p-3" >
-            <p style="font-size: 12px; font-weight: 900; color: inherit">소개글</p>
+            <p style="font-size: 14px; font-weight: 900; color: inherit" th:text="${profile.myComment}">소개글</p>
             <a href="/user/login-page" class="logo" style="float:right; margin-right: 50px; font-size: 13px">image</a>
-            <p style="font-size: 10px; font-weight: 600; color: inherit">username</p>
-            <p style="font-size: 13px; font-weight: 200; color: inherit">follow 0명</p><br>
-            <button type="button" style="width: 180px; float:left; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/user/introduce'">프로필 수정</button>
-            <button type="button" style="width: 180px; float:right; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/user/introduce'">비밀번호 수정</button><br><br>
+            <p style="font-size: 12px; font-weight: 600; color: inherit" th:text="${profile.nickname}"></p>
+            <a href="#pop_info_1" class="btn_open" style="font-size: 13px; font-weight: 200; color: inherit" th:text="팔로잉+${profile.followUsers}+명"></a><br>
+            <p></p>
+            <button type="button" th:if="__${user_id}__ == null" style="width: 180px; float:left; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/updateProfile'">프로필 수정</button>
+            <button type="button" th:if="__${user_id}__ == null" style="width: 180px; float:right; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/user/introduce'">비밀번호 수정</button>
+            <button type="button" th:if="__${user_id}__ != null" style="width: 360px; float:right; font-size: 12px" class="btn btn-outline-dark" id="follow-btn">팔로우</button><br><br>
+            <button type="button" th:if="__${user_id}__ != null" style="width: 360px; float:right; font-size: 12px" class="btn btn-outline-dark" id="follow-btn">팔로우</button><br><br>
+            <input type="hidden" id="user-id" th:value="__${user_id}__">
             <table>
                 <tr>
                     <td><a href="/profile" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">Umm</a>
@@ -62,6 +75,19 @@
                 </tr>
             </table>
         </div>
+
+
+
+            <div id="pop_info_1" class="pop_wrap" style="display:none;">
+                <div class="pop_inner">
+                    <div class="row-6" th:each = "follower : ${profile.followingUserDtoList}">
+                        <a class="card-title" th:onclick="|location.href='@{/profile/{user_id}(user_id=${follower.id})}'|" th:text="${follower.nickname}"></a>
+                    </div>
+                    <button type="button" class="btn_close">닫기</button>
+                </div>
+            </div>
+
+
 
         <div class="p-3 bg-warning">
             umm list
@@ -87,3 +113,24 @@
 </body>
 
 </html>
+<script>
+    var target = document.querySelectorAll('.btn_open');
+    var btnPopClose = document.querySelectorAll('.pop_wrap .btn_close');
+    var targetID;
+
+    // 팝업 열기
+    for(var i = 0; i < target.length; i++){
+        target[i].addEventListener('click', function(){
+            targetID = this.getAttribute('href');
+            document.querySelector(targetID).style.display = 'block';
+        });
+    }
+
+    // 팝업 닫기
+    for(var j = 0; j < target.length; j++){
+        btnPopClose[j].addEventListener('click', function(){
+            this.parentNode.parentNode.style.display = 'none';
+        });
+    }
+
+</script>

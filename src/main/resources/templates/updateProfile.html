@@ -10,19 +10,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
     <script src="/js/basic.js"></script>
     <style>
-        footer {
-        position: absolute;
-        height: 60px;
-        width: 400px;
-        line-height: 60px;
-        color: #8a8c8f;
-        background-color: white;
-        }
-        html, body {
-            height: 100%
-        }
-        footer {
+        #footer {
+            position: fixed;
+            background-color: white;
+            left: 300px;
+            right: 300px;
             bottom: 0;
+            height: 4rem;
         }
         table {
             width: 100%;
@@ -63,18 +57,18 @@
 
 </div>
 
-<footer>
+<div id="footer">
     <table>
         <tr>
             <td><a href="/" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">home</a>
             </td>
-            <td><a href="/user/login-page" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">new Umm</a>
+            <td><a href="/umm" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">new Umm</a>
             </td>
             <td><a href="/profile" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">User</a>
             </td>
         </tr>
     </table>
-</footer>
+</div>
 
 </body>
 

@@ -15,8 +15,4 @@ public class FollowController {
      public void following(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long user_id){
         followService.following(userDetails,user_id);
     }
-    @DeleteMapping("/follow/{user_id}")
-    public void unfollowing(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long user_id) {
-        followService.unfollowing(userDetails, user_id);
-    }
 }

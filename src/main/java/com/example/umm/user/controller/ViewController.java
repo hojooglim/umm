@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class ViewController {
     private final UserService userService;
 
-    @GetMapping("/")
-    public String home(){return "index";}
 
 
     @GetMapping("/profile")

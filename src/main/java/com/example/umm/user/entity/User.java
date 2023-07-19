@@ -1,6 +1,8 @@
 package com.example.umm.user.entity;
 
 import com.example.umm.follow.entity.Follow;
+import com.example.umm.umm.entity.ReUmm;
+import com.example.umm.umm.entity.Umm;
 import com.example.umm.user.dto.ProfileRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,6 +33,12 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Follow> followList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Umm> ummList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<ReUmm> ReUmmList = new ArrayList<>();
 
     public User(String email, String password, String nickname, UserRoleEnum role) {
         this.email=email;

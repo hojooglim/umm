@@ -2,7 +2,6 @@ package com.example.umm.comment.service;
 
 
 import com.example.umm.comment.dto.CommentRequestDto;
-import com.example.umm.comment.dto.CommentResponseDto;
 import com.example.umm.comment.entity.Comment;
 import com.example.umm.comment.repository.CommentRepository;
 import com.example.umm.security.filter.UserDetailsImpl;
@@ -19,8 +18,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UmmRepository ummRepository;
 
-    public void createComment(UserDetailsImpl userDetails, CommentRequestDto requestDto, Long blog_id) {
-        Umm umm = ummRepository.findById(blog_id).orElseThrow(() ->
+    public void createComment(UserDetailsImpl userDetails, CommentRequestDto requestDto, Long ummId) {
+        Umm umm = ummRepository.findById(ummId).orElseThrow(() ->
                 new RuntimeException("해당 피드를 찾을 수 없습니다.")
         );
         commentRepository.save(new Comment(requestDto, userDetails, umm));

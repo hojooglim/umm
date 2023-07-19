@@ -17,12 +17,12 @@ public class UmmController {
     private final UmmService ummService;
 
     @PostMapping("/umm")
-    public void create(@AuthenticationPrincipal UserDetailsImpl userDetails, UmmRequestDto ummRequestDto){
+    public void create(@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody UmmRequestDto ummRequestDto){
          ummService.create(userDetails,ummRequestDto);
     }
 
     @PutMapping("/umm/{umm_id}")
-    public void update(@PathVariable Long umm_id, @AuthenticationPrincipal UserDetailsImpl userDetails, UmmRequestDto ummRequestDto){
+    public void update(@PathVariable Long umm_id, @AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody UmmRequestDto ummRequestDto){
         ummService.update(umm_id,userDetails,ummRequestDto);
     }
 
@@ -31,15 +31,22 @@ public class UmmController {
         ummService.delete(umm_id,userDetails);
     }
 
-    @GetMapping("/umm/{umm_id}")
-    public UmmResponseDto getUmm(@PathVariable Long umm_id){
-       return ummService.getUmm(umm_id);
+    @PostMapping("/re-Umm/{umm_id}")
+    public void reUmm(@PathVariable Long umm_id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        ummService.reUmm(umm_id,userDetails);
     }
 
-    @GetMapping("/umm")
-    public List<UmmResponseDto> getUmmList(){
-        return ummService.getUmmList();
-    }
+
+
+//    @GetMapping("/umm/{umm_id}")
+//    public UmmResponseDto getUmm(@PathVariable Long umm_id){
+//       return ummService.getUmm(umm_id);
+//    }
+
+//    @GetMapping("/umm")
+//    public List<UmmResponseDto> getUmmList(){
+//        return ummService.getUmmList();
+//    }
 
 
 }

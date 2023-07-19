@@ -94,19 +94,18 @@ $(document).ready(function () {
 
 
     // 생성 기능
-    const createButton = document.getElementById('create-btn');
+    const createUmm = document.getElementById('createUmm-btn');
 
-    if (createButton) {
-        createButton.addEventListener('click', event => {
-            fetch('/feed', {
+    if (createUmm) {
+        createUmm.addEventListener('click', event => {
+            fetch('/umm', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    title: document.getElementById('title').value,
-                    url: document.getElementById('url').value,
-                    contents: document.getElementById('content').value
+                    image: document.getElementById('image').value,
+                    contents: document.getElementById('contents').value,
                 })
             })
                 .then(() => {

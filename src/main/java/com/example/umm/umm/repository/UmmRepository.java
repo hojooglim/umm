@@ -10,6 +10,6 @@ import java.util.List;
 public interface UmmRepository extends JpaRepository<Umm,Long> {
     List<Umm> findAllByOrderByModifiedAtDesc();
 
-    Slice<Umm> findSliceByPrice(int price, Pageable pageable);
+//    Slice<Umm> findSliceByPrice(int price, Pageable pageable);
 
 }

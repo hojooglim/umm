@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikeItController {
     private final LikeItService likeitService;
 
-    @PostMapping("/blogLike/{blog_id}")
-    public void ummLike(@PathVariable Long blog_id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        likeitService.ummLike(blog_id,userDetails);
+    @PostMapping("/ummLike/{umm_id}")
+    public void ummLike(@PathVariable Long umm_id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        likeitService.ummLike(umm_id,userDetails);
 
     }
 

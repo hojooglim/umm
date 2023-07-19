@@ -2,14 +2,10 @@ package com.example.umm.umm.controller;
 
 import com.example.umm.security.filter.UserDetailsImpl;
 import com.example.umm.umm.dto.UmmRequestDto;
-import com.example.umm.umm.dto.UmmResponseDto;
 import com.example.umm.umm.service.UmmService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

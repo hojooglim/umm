@@ -110,7 +110,7 @@ $(document).ready(function () {
             })
                 .then(() => {
                     alert('등록 완료되었습니다.');
-                    location.replace('/');
+                    location.replace(`/profile`);
                 });
         });
     }
@@ -122,23 +122,22 @@ $(document).ready(function () {
     if (modifyButton) {
         modifyButton.addEventListener('click', event => {
             let params = new URLSearchParams(location.search);
-            let id = params.get('feed_id');
+            let id = params.get('umm_id');
 
-            fetch(`/feed/${id}`, {
+            fetch(`/umm/${id}`, {
                 method: 'PUT',
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    title: document.getElementById('title').value,
-                    url: document.getElementById('url').value,
-                    contents: document.getElementById('content').value
+                    image: document.getElementById('image').value,
+                    contents: document.getElementById('contents').value,
                 })
             })
                 .then(() => {
                     alert('수정이 완료되었습니다.');
 
-                    location.replace(`/`);
+                    location.replace(`/profile`);
                 });
         });
     }
@@ -149,14 +148,14 @@ $(document).ready(function () {
     if (deleteButton) {
         deleteButton.addEventListener('click', event => {
             let params = new URLSearchParams(location.search);
-            let id = params.get('feed_id');
+            let id = params.get('umm_id');
 
-            fetch(`/feed/${id}`, {
+            fetch(`/umm/${id}`, {
                 method: 'DELETE'
             })
                 .then(() => {
                     alert('삭제가 완료되었습니다.');
-                    location.replace('/');
+                    location.replace('/profile');
                 });
         });
     }
@@ -166,13 +165,13 @@ $(document).ready(function () {
 
     if (likeButton) {
         likeButton.addEventListener('click', event => {
-            let id = document.getElementById('feed-id').value;
-            fetch(`/feed/${id}/like`, {
+            let umm_id = document.getElementById('umm-id').value;
+            fetch(`/ummLike/${umm_id}`, {
                 method: 'POST'
             })
                 .then(() => {
                     alert('좋아요 성공!');
-                    location.replace('/');
+                    location.replace(`/profile`);
                 });
         });
     }
@@ -181,14 +180,14 @@ $(document).ready(function () {
 
     if (commentButton) {
         commentButton.addEventListener('click', event => {
-            let id = document.getElementById('feed-id').value;
+            let id = document.getElementById('umm-id').value;
             fetch(`/comments/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    comments: document.getElementById('comments').value,
+                    comment: document.getElementById('comment').value,
                 })
             })
                 .then(() => {
@@ -211,7 +210,7 @@ $(document).ready(function () {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    comments: document.getElementById('comment').value,
+                    comment: document.getElementById('comment').value,
                 })
             })
                 .then(() => {

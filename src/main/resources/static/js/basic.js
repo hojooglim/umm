@@ -329,7 +329,7 @@ $(document).ready(function () {
             })
                 .then(() => {
                     alert('등록 완료되었습니다.');
-                    location.replace('/');
+                    location.replace(`/profile`);
                 });
         });
     }

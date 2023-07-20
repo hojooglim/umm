@@ -6,4 +6,5 @@ import lombok.Getter;
 public class ProfileRequestDto {
     private String nickname;
     private String myComment;
+    private String myImage;
 }

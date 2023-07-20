@@ -33,20 +33,32 @@ public class Umm extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "umm")
+    @OneToMany(mappedBy = "umm", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "umm")
+    @OneToMany(mappedBy = "umm", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<LikeIt> likeItList = new ArrayList<>();
 
-    public Umm(UserDetailsImpl userDetails, UmmRequestDto ummRequestDto) {
-        this.image= ummRequestDto.getImage();
-        this.contents= ummRequestDto.getContents();
+    @OneToMany(mappedBy = "umm", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<ReUmm> reUmmList = new ArrayList<>();
+
+    public Umm(UserDetailsImpl userDetails, String contents, String imageUrl) {
+        this.image= imageUrl;
+        this.contents= contents;
         this.user=userDetails.getUser();
     }
 
-    public void update(UmmRequestDto ummRequestDto) {
-        this.image= ummRequestDto.getImage();
-        this.contents= ummRequestDto.getContents();
+    public Umm(UserDetailsImpl userDetails, String contents) {
+        this.contents=contents;
+        this.user=userDetails.getUser();
+    }
+
+    public void update(String contents, String imageUrl) {
+        this.contents=contents;
+        this.image=imageUrl;
+    }
+
+    public void update(String contents) {
+        this.contents=contents;
     }
 }

@@ -92,56 +92,6 @@ $(document).ready(function () {
         });
     }
 
-
-    // 생성 기능 /
-    const createUmm = document.getElementById('createUmm-btn');
-
-    if (createUmm) {
-        createUmm.addEventListener('click', event => {
-            fetch('/umm', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    image: document.getElementById('image').value,
-                    contents: document.getElementById('contents').value,
-                })
-            })
-                .then(() => {
-                    alert('등록 완료되었습니다.');
-                    location.replace(`/profile`);
-                });
-        });
-    }
-
-
-    // 수정 기능 /
-    const modifyButton = document.getElementById('modify-btn');
-
-    if (modifyButton) {
-        modifyButton.addEventListener('click', event => {
-            let params = new URLSearchParams(location.search);
-            let id = params.get('umm_id');
-
-            fetch(`/umm/${id}`, {
-                method: 'PUT',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    image: document.getElementById('image').value,
-                    contents: document.getElementById('contents').value,
-                })
-            })
-                .then(() => {
-                    alert('수정이 완료되었습니다.');
-
-                    location.replace(`/profile`);
-                });
-        });
-    }
-
     // 삭제 기능 /
     const deleteButton = document.getElementById('delete-btn');
 
@@ -160,21 +110,6 @@ $(document).ready(function () {
         });
     }
 
-    // 좋아요 기능/
-    const likeButton = document.getElementById('like-btn');
-
-    if (likeButton) {
-        likeButton.addEventListener('click', event => {
-            let umm_id = document.getElementById('umm-id').value;
-            fetch(`/ummLike/${umm_id}`, {
-                method: 'POST'
-            })
-                .then(() => {
-                    alert('좋아요 성공!');
-                    location.replace(`/profile`);
-                });
-        });
-    }
 
     // repost 기능/
     const repostButton = document.getElementById('repost-btn');

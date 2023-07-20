@@ -13,9 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 public class ReUmmResponseDto {
     Long id;
+    Long user_id;
     String nickname;
     String image;
     String contents;
+    String myImage;
     LocalDate createdAt;
     int LikeItUmmCount;
     int commentCount;
@@ -23,8 +25,10 @@ public class ReUmmResponseDto {
 
     public ReUmmResponseDto(ReUmm reUmm) {
         this.id=reUmm.getUmm().getId();
+        this.user_id=reUmm.getUser().getId();
         this.nickname=reUmm.getUmm().getUser().getNickname();
         this.image=reUmm.getUmm().getImage();
+        this.myImage=reUmm.getUmm().getUser().getMyImage();
         this.contents=reUmm.getUmm().getContents();
         this.createdAt=reUmm.getUmm().getCreatedAt().toLocalDate();
         this.LikeItUmmCount=reUmm.getUmm().getLikeItList().size();

@@ -17,6 +17,7 @@ public class ProfileResponseDto {
 
     private String nickname;
     private String myComment;
+    private String myImage;
     private int followUsers;
     private List<FollowingUserDto> followingUserDtoList;
     private List<UmmResponseDto> ummList;
@@ -25,6 +26,7 @@ public class ProfileResponseDto {
     public ProfileResponseDto(User user) {
         this.nickname= user.getNickname();
         this.myComment=user.getMyComment();
+        this.myImage=user.getMyImage();
         this.followUsers=user.getFollowList().size();
         this.followingUserDtoList=user.getFollowList().stream().map(FollowingUserDto::new).toList();
         this.ummList = new ArrayList<>();

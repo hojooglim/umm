@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface UmmRepository extends JpaRepository<Umm,Long> {
-    List<Umm> findAllByOrderByModifiedAtDesc();
+    List<Umm> findAllByOrderByCreatedAtDesc();
 
 //    Slice<Umm> findSliceByPrice(int price, Pageable pageable);
 

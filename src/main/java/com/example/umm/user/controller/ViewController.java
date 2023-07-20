@@ -32,6 +32,20 @@ public class ViewController {
         return "profile";
     }
 
+    @GetMapping("/reumm")
+    public void reUmmDefault(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+        profile(userDetails.getUser().getId(), model);
+    }
+
+    @GetMapping("/reumm/{user_id}")
+    public String reUmm(@PathVariable Long user_id, Model model) {
+
+        ProfileResponseDto profile = userService.findUserIdProfile(user_id);
+
+        model.addAttribute("profile",profile);
+
+        return "reumm";
+    }
 
 
     @GetMapping("/updateProfile")

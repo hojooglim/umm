@@ -20,8 +20,8 @@ public class LikeItService {
     private final UmmRepository ummRepository;
     private final CommentRepository commentRepository;
 
-    public void ummLike(Long blogId, UserDetailsImpl userDetails) {
-        Umm umm = ummRepository.findById(blogId).orElseThrow(
+    public void ummLike(Long ummId, UserDetailsImpl userDetails) {
+        Umm umm = ummRepository.findById(ummId).orElseThrow(
                 ()-> new NullPointerException("글이 존재하지 않습니다.")
         );
 

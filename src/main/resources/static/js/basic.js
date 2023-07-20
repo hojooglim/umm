@@ -8,7 +8,7 @@ $(document).ready(function () {
         });
         // showProfile();
     }
-    //회원가입
+    //회원가입 /
     const signupButton = document.getElementById('signup-btn');
 
     if (signupButton) {
@@ -93,7 +93,7 @@ $(document).ready(function () {
     }
 
 
-    // 생성 기능
+    // 생성 기능 /
     const createUmm = document.getElementById('createUmm-btn');
 
     if (createUmm) {
@@ -110,85 +110,100 @@ $(document).ready(function () {
             })
                 .then(() => {
                     alert('등록 완료되었습니다.');
-                    location.replace('/');
+                    location.replace(`/profile`);
                 });
         });
     }
 
 
-    // 수정 기능
+    // 수정 기능 /
     const modifyButton = document.getElementById('modify-btn');
 
     if (modifyButton) {
         modifyButton.addEventListener('click', event => {
             let params = new URLSearchParams(location.search);
-            let id = params.get('feed_id');
+            let id = params.get('umm_id');
 
-            fetch(`/feed/${id}`, {
+            fetch(`/umm/${id}`, {
                 method: 'PUT',
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    title: document.getElementById('title').value,
-                    url: document.getElementById('url').value,
-                    contents: document.getElementById('content').value
+                    image: document.getElementById('image').value,
+                    contents: document.getElementById('contents').value,
                 })
             })
                 .then(() => {
                     alert('수정이 완료되었습니다.');
 
-                    location.replace(`/`);
+                    location.replace(`/profile`);
                 });
         });
     }
 
-    // 삭제 기능
+    // 삭제 기능 /
     const deleteButton = document.getElementById('delete-btn');
 
     if (deleteButton) {
         deleteButton.addEventListener('click', event => {
             let params = new URLSearchParams(location.search);
-            let id = params.get('feed_id');
+            let id = params.get('umm_id');
 
-            fetch(`/feed/${id}`, {
+            fetch(`/umm/${id}`, {
                 method: 'DELETE'
             })
                 .then(() => {
                     alert('삭제가 완료되었습니다.');
-                    location.replace('/');
+                    location.replace('/profile');
                 });
         });
     }
 
-    // 좋아요 기능
+    // 좋아요 기능/
     const likeButton = document.getElementById('like-btn');
 
     if (likeButton) {
         likeButton.addEventListener('click', event => {
-            let id = document.getElementById('feed-id').value;
-            fetch(`/feed/${id}/like`, {
+            let umm_id = document.getElementById('umm-id').value;
+            fetch(`/ummLike/${umm_id}`, {
                 method: 'POST'
             })
                 .then(() => {
                     alert('좋아요 성공!');
-                    location.replace('/');
+                    location.replace(`/profile`);
                 });
         });
     }
-    //댓글 입력 기능
+
+    // repost 기능/
+    const repostButton = document.getElementById('repost-btn');
+
+    if (repostButton) {
+        repostButton.addEventListener('click', event => {
+            let umm_id = document.getElementById('umm-id').value;
+            fetch(`/re-Umm/${umm_id}`, {
+                method: 'POST'
+            })
+                .then(() => {
+                    alert('저장 성공!');
+                    location.replace(`/reumm`);
+                });
+        });
+    }
+    //댓글 입력 기능/
     const commentButton = document.getElementById('comment-btn');
 
     if (commentButton) {
         commentButton.addEventListener('click', event => {
-            let id = document.getElementById('feed-id').value;
+            let id = document.getElementById('umm-id').value;
             fetch(`/comments/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    comments: document.getElementById('comments').value,
+                    comment: document.getElementById('comments').value,
                 })
             })
                 .then(() => {
@@ -198,7 +213,7 @@ $(document).ready(function () {
         });
     }
 
-    // 댓글 수정 기능
+    // 댓글 수정 기능 /
     const commentUpdateButton = document.getElementById('commentUpdate-btn');
 
     if (commentUpdateButton) {
@@ -211,7 +226,7 @@ $(document).ready(function () {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    comments: document.getElementById('comment').value,
+                    comment: document.getElementById('comment').value,
                 })
             })
                 .then(() => {
@@ -222,7 +237,7 @@ $(document).ready(function () {
         });
     }
 
-    // 댓글 삭제 기능
+    // 댓글 삭제 기능 /
     const commentDeleteButton = document.getElementById('commentDelete-btn');
 
     if (commentDeleteButton) {
@@ -239,7 +254,7 @@ $(document).ready(function () {
         });
     }
 
-    // profile 수정 기능
+    // profile 수정 기능 /
     const modifyProfile = document.getElementById('modifyProfile-btn');
 
     if (modifyProfile) {
@@ -313,7 +328,7 @@ $(document).ready(function () {
                 });
         });
     }
-    // 팔로우 기능
+    // 팔로우 기능/
     const followButton = document.getElementById('follow-btn');
 
     if (followButton) {

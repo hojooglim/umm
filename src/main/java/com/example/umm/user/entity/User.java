@@ -7,6 +7,7 @@ import com.example.umm.user.dto.ProfileRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class User {
     private String password;
     private String nickname;
     private String myComment;
+    private String myImage;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -47,9 +49,14 @@ public class User {
         this.role=role;
     }
 
-    public User updateProfile(ProfileRequestDto requestDto) {
-        this.nickname=requestDto.getNickname();
-        this.myComment=requestDto.getMyComment();
-        return new User();
+    public void updateProfile(String nickname, String myComment, String imageUrl) {
+        this.nickname=nickname;
+        this.myComment=myComment;
+        this.myImage=imageUrl;
+    }
+
+    public void updateProfile(String nickname, String myComment) {
+        this.nickname=nickname;
+        this.myComment=myComment;
     }
 }

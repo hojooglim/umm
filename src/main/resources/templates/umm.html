@@ -33,8 +33,8 @@
 
 <header class="p-3">
     <a href="/" class="logo" style="font-weight: 900; color: inherit">취소</a>
-    <button th:if="${umm.id} == null" type="button" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark" id="createUmm-btn">완료</button>
-    <button th:if="${umm.id} != null" type="button" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark" id="modify-btn">수정</button>
+    <button th:if="${umm.id} == null" type="button" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark" id="createUmm-btn" onclick="create()">완료</button>
+    <button th:if="${umm.id} != null" type="button" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark" id="modify-btn" onclick="update()">수정</button>
     <button th:if="${umm.id} != null" type="button" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark" id="delete-btn">삭제</button>
 </header>
 
@@ -46,11 +46,12 @@
             <article>
                 <header class="mb-4">
                     <label>이미지</label>
-                    <input type="text" class="form-control" placeholder="+이미지" id="image" th:value="${umm.image}">
+                    <input type="text" class="form-control" placeholder="+파일추가" id="image" th:value="${umm.image}">
+                    <input type="file" id="image1">
                 </header>
                 <section class="mb-5">
                     <label>텍스트</label>
-                    <textarea class="form-control h-25" rows="10" placeholder="+umm" id="contents" th:text="${umm.contents}"></textarea>
+                    <textarea class="form-control h-25" rows="10" placeholder="+작성할 내용을 입력하세요..." id="contents" th:text="${umm.contents}"></textarea>
                 </section>
             </article>
         </div>
@@ -75,3 +76,67 @@
 </body>
 
 </html>
+
+<script>
+    function create(){
+        let contents = $('#contents').val();
+
+        let imageInput = document.getElementById('image1');
+        let image = imageInput.files[0];
+        let formData = new FormData();
+        formData.append("contents", contents);
+        if (image !== 'undefined') {
+            formData.append("image", image)
+        }
+        $.ajax({
+            type: "POST",
+            url: `/umm`,
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(function () {
+            alert("생성 완료")
+            location.replace(`/profile`);
+        })
+    }
+
+    function update(){
+        let params = new URLSearchParams(location.search);
+        let id = params.get('umm_id');
+
+        let contents = $('#contents').val();
+
+        let imageInput = document.getElementById('image1');
+        let image = imageInput.files[0];
+        let formData = new FormData();
+        formData.append("contents", contents);
+        if (image !== 'undefined') {
+            formData.append("image", image)
+        }
+        $.ajax({
+            type: "PUT",
+            url: `/umm/${id}`,
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(function () {
+            alert("Umm 수정 완료")
+            location.replace(`/profile`);
+        })
+    }
+
+    // function remove(){
+    //     let params = new URLSearchParams(location.search);
+    //     let id = params.get('umm_id');
+    //
+    //     $.ajax({
+    //         type: "DELETE",
+    //         url: `/umm/${id}`,
+    //         processData: false,
+    //         contentType: false
+    //     }).done(function () {
+    //         alert("삭제 완료")
+    //         location.replace(`/profile`);
+    //     })
+    // }
+</script>

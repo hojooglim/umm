@@ -33,7 +33,7 @@
 
 <header class="p-3">
     <a href="/profile" class="logo" style="font-weight: 900; color: inherit">취소</a>
-    <button type="button" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark" id="modifyProfile-btn">완료</button>
+    <button type="button" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark"  onclick="update()">완료</button>
 </header>
 
 <div class="container flex-grow-1 p-0" >
@@ -42,6 +42,11 @@
 
         <div class="flex-grow-1 p-3" >
             <article>
+                <header class="mb-4">
+                    <label>이미지</label>
+                    <input type="text" class="form-control" placeholder="+파일추가" id="image" th:value="${profile.myImage}">
+                    <input type="file" id="image1">
+                </header>
                 <header class="mb-4">
                     <label>닉네임</label>
                     <input type="text" class="form-control" placeholder="+닉네임" id="nickname" th:value="${profile.nickname}">
@@ -73,3 +78,29 @@
 </body>
 
 </html>
+<script>
+    function update(){
+
+        let nickname = $('#nickname').val();
+        let myComment = $('#myComment').val();
+
+        let imageInput = document.getElementById('image1');
+        let image = imageInput.files[0];
+        let formData = new FormData();
+        formData.append("nickname", nickname);
+        formData.append("myComment", myComment);
+        if (image !== 'undefined') {
+            formData.append("image", image)
+        }
+        $.ajax({
+            type: "PUT",
+            url: `/profile`,
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(function () {
+            alert("프로필 수정 완료")
+            location.replace(`/profile`);
+        })
+    }
+</script>

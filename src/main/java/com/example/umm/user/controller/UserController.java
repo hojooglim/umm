@@ -8,6 +8,9 @@ import com.example.umm.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +24,11 @@ public class UserController {
         return "redirect:/user/login-page";
     }
     @PutMapping("/profile")
-    public ProfileResponseDto editIntroduce(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProfileRequestDto requestDto){
-        return userService.updateProfile(userDetails, requestDto);
+    public void editIntroduce(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                            @RequestParam(value = "nickname") String nickname,
+                                            @RequestParam(value = "myComment") String myComment,
+                                            @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+         userService.updateProfile(userDetails, nickname, myComment, image);
     }
 
 }

@@ -6,6 +6,9 @@ import com.example.umm.umm.service.UmmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,13 +16,17 @@ public class UmmController {
     private final UmmService ummService;
 
     @PostMapping("/umm")
-    public void create(@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody UmmRequestDto ummRequestDto){
-         ummService.create(userDetails,ummRequestDto);
+    public void create(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                       @RequestParam(value = "image", required = false) MultipartFile image,
+                       @RequestParam(value = "contents") String contents) throws IOException {
+         ummService.create(userDetails,image,contents);
     }
 
     @PutMapping("/umm/{umm_id}")
-    public void update(@PathVariable Long umm_id, @AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody UmmRequestDto ummRequestDto){
-        ummService.update(umm_id,userDetails,ummRequestDto);
+    public void update(@PathVariable Long umm_id, @AuthenticationPrincipal UserDetailsImpl userDetails,
+                       @RequestParam(value = "image", required = false) MultipartFile image,
+                       @RequestParam(value = "contents") String contents) throws IOException {
+        ummService.update(umm_id,userDetails,image,contents);
     }
 
     @DeleteMapping("/umm/{umm_id}")

@@ -13,9 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 public class UmmResponseDto {
     Long id;
+    Long user_id;
     String nickname;
     String image;
     String contents;
+    String myImage;
     LocalDate createdAt;
     int LikeItUmmCount;
     int commentCount;
@@ -23,9 +25,11 @@ public class UmmResponseDto {
 
     public UmmResponseDto(Umm umm) {
         this.id=umm.getId();
+        this.user_id=umm.getUser().getId();
         this.nickname=umm.getUser().getNickname();
         this.image=umm.getImage();
         this.contents=umm.getContents();
+        this.myImage=umm.getUser().getMyImage();
         this.createdAt=umm.getCreatedAt().toLocalDate();
         this.LikeItUmmCount=umm.getLikeItList().size();
         this.commentList=umm.getCommentList().stream().map(CommentResponseDto::new).toList();

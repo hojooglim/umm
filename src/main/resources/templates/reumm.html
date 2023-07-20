@@ -50,8 +50,8 @@
     <div class="d-flex flex-column">
 
         <div class="flex-grow-1 p-3" >
+            <img style="float:right; margin-right: 30px; width:80px;" th:src="${profile.myImage}">
             <p style="font-size: 14px; font-weight: 900; color: inherit" th:text="${profile.myComment}">소개글</p>
-            <a href="/user/login-page" class="logo" style="float:right; margin-right: 50px; font-size: 13px">image</a>
             <p style="font-size: 12px; font-weight: 600; color: inherit" th:text="${profile.nickname}"></p>
             <a href="#pop_info_1" class="btn_open" style="font-size: 13px; font-weight: 200; color: inherit" th:text="팔로잉+${profile.followUsers}+명"></a><br>
             <p></p>
@@ -86,31 +86,42 @@
         <div class="p-3">
             <div style="margin-top: 10px; margin-left: 10px" th:each = "reumm : ${profile.reUmmList}">
                 <input type="hidden" id="umm-id" th:value="${reumm.id}">
-                <a th:text="${reumm.nickname}"></a>
+                <img  style="width:30px;" th:src="${reumm.myImage}">
+                <a style="font-size: 12px; font-weight: 600; color: inherit" th:href ="@{/profile/{user_id}(user_id=${reumm.user_id})}"
+                   th:text="${reumm.nickname}"></a>
                 <a style="float:right; font-size: 5px; color: darkgray" th:text="${reumm.createdAt}"></a>
 
                 <div style="margin-left: 30px">
-                    <p th:text="${reumm.image}"></p>
-                    <p th:text="${reumm.contents}"></p>
 
+                    <p style="font-size: 11px; font-weight: 500; color: inherit; margin-top: 7px" th:text="${reumm.contents}"></p>
+                    <div>
+                        <img style="width:320px;" th:src="${reumm.image}">
+                    </div>
 
+                    <div style="margin-top: 7px">
                     <button class="btn btn-black" style="font-size: 8px" id="like-btn">좋아요</button>
                     <button class="btn btn-black" style="font-size: 8px" onclick="javascript:doDisplay();">댓글</button>
                     <button class="btn btn-black" style="font-size: 8px" id="repost-btn">저장취소</button>
+                    </div>
 
                     <div id="myDIV" style= "display: none">
                         <div class="row-6" th:each="comment : ${reumm.commentList}">
-                            <input type="hidden" id="comment-id" th:value="${comment.id}">
+                            <input type="hidden" id="comment-id" th:value="${comment.getId()}">
                             <div>
-                                <span th:text="${comment.nickname}"></span> :
-                                <input id="comment" th:value="${comment.comment}"></input>
-                                <button class="btn bnt-black" style="font-size: 2px" id="commentUpdate-btn">수정</button>
-                                <button class="btn bnt-black" style="font-size: 2px" id="commentDelete-btn">삭제</button>
+                                <span style="font-size: 7px; font-weight: 700; color: inherit" th:text="${comment.nickname}"></span>
+                                <div>
+                                    <input id="comment" style="font-size: 11px; font-weight: 500; color: inherit; border:none" th:value="${comment.comment}">
+                                    <button class="btn bnt-black" style="font-size: 2px" id="commentUpdate-btn">수정</button>
+                                    <button class="btn bnt-black" style="font-size: 2px" id="commentDelete-btn">삭제</button>
+                                </div>
+
                             </div>
                         </div>
-                        <input id="comments" placeholder="댓글을 입력해 주세요.">
-                        <button class="btn bnt-black" style="font-size: 2px" id="comment-btn">등록</button>
+                        <input id="comments" style="font-size: 11px; font-weight: 600; color: inherit; width: 270px; border:none" placeholder="댓글을 입력해 주세요.">
+                        <button class="btn bnt-black" style="font-size: 7px; color: dodgerblue" id="comment-btn">게시</button>
                     </div>
+
+
                 </div>
 
                 <label style="font-size: 7px">좋아요 </label>
@@ -160,6 +171,21 @@
         });
     }
 
+    // 좋아요 기능/
+    const likeButton = document.getElementById('like-btn');
+
+    if (likeButton) {
+        likeButton.addEventListener('click', event => {
+            let umm_id = document.getElementById('umm-id').value;
+            fetch(`/ummLike/${umm_id}`, {
+                method: 'POST'
+            })
+                .then(() => {
+                    alert('좋아요 성공!');
+                    location.replace(`/reumm`);
+                });
+        });
+    }
 </script>
 <script type="text/javascript">
     var bDisplay = true; function doDisplay(){

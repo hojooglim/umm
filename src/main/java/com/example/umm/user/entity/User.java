@@ -59,4 +59,8 @@ public class User {
         this.nickname=nickname;
         this.myComment=myComment;
     }
+
+    public void updatePassword(String password) {
+        this.password=password;
+    }
 }

@@ -56,7 +56,7 @@
             <a href="#pop_info_1" class="btn_open" style="font-size: 13px; font-weight: 200; color: inherit" th:text="팔로잉+${profile.followUsers}+명"></a><br>
             <p></p>
             <button type="button" th:if="__${user_id}__ == null" style="width: 180px; float:left; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/updateProfile'">프로필 수정</button>
-            <button type="button" th:if="__${user_id}__ == null" style="width: 180px; float:right; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/user/introduce'">비밀번호 수정</button>
+            <button type="button" th:if="__${user_id}__ == null" style="width: 180px; float:right; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/updatePassword'">비밀번호 수정</button>
             <button type="button" th:if="__${user_id}__ != null" style="width: 360px; float:right; font-size: 12px" class="btn btn-outline-dark" id="follow-btn">팔로우</button><br><br>
 <!--            pathval == profil.getfollist.id -> 언팔 못함-->
             <input type="hidden" id="user-id" th:value="__${user_id}__">

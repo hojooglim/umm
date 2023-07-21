@@ -47,13 +47,18 @@ public class ViewController {
         return "reumm";
     }
 
-
     @GetMapping("/updateProfile")
     public String updateProfile(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model){
         ProfileResponseDto profile = userService.findUserProfile(userDetails);
         model.addAttribute("profile",profile);
         return "updateProfile";
     }
+
+    @GetMapping("/updatePassword")
+    public String updatePassword(){
+        return "updatePassword";
+    }
+
     @GetMapping("/user/login-page")
     public String login(){
         return "login";

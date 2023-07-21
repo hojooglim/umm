@@ -174,29 +174,6 @@ $(document).ready(function () {
         });
     }
 
-    // profile 수정 기능 /
-    const modifyProfile = document.getElementById('modifyProfile-btn');
-
-    if (modifyProfile) {
-        modifyProfile.addEventListener('click', event => {
-
-            fetch(`/profile`, {
-                method: 'PUT',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    nickname: document.getElementById('nickname').value,
-                    myComment: document.getElementById('myComment').value
-                })
-            })
-                .then(() => {
-                    alert('수정이 완료되었습니다.');
-                    location.replace(`/profile`);
-                });
-        });
-    }
-
     //비밀번호 확인
     const checkPasswordButton = document.getElementById('checkPassword-btn');
 
@@ -218,7 +195,7 @@ $(document).ready(function () {
                         $("#newPasswordForm").show();
                     } else {
                         alert('비밀번호가 틀렸습니다.');
-                        location.replace('/user/introduce');
+                        location.replace('/profile');
                     }
 
                 });
@@ -231,7 +208,6 @@ $(document).ready(function () {
     if (newPasswordButton) {
         newPasswordButton.addEventListener('click', event => {
 
-
             fetch(`/password`, {
                 method: 'PUT',
                 headers: {
@@ -242,8 +218,8 @@ $(document).ready(function () {
                 })
             })
                 .then(() => {
-                    alert('수정이 완료되었습니다.');
-                    $("#newPasswordForm").hide();
+                    alert('비밀번호가 변경되었습니다.');
+                    location.replace('/profile');
                 });
         });
     }
@@ -279,31 +255,7 @@ function getToken() {
     }
     return auth;
 }
-function showProfile() {
-    $.ajax({
-        type: 'GET',
-        url: `/user-info`,
-        success: function (response) {
-            $('#profile').empty();
-            $('#profile').append(`
-                <div class="header" style="float:left">
-                    <div class="card-body p-5 text-center">
-                        <a href ="/feeds/user=${response.user_id}"
-                        class="logo" style="font-weight: 200; color: inherit">
-                        <p>${response.nickname}</p>
-                        <p>${response.myContent}</p></a><br>
-                        <button type="button" style="width: 120px;" onclick="location.href='/feed'" class="btn btn-dark">Feed 추가</button><br><br>
-                        <button type="button" style="width: 120px;" class="btn btn-light" onclick="location.href='/user/introduce'">프로필 수정</button><br><br>
-                        <button type="button"style="width: 120px;"  class="btn btn-secondary" onclick="location.href='/user/loin-page'">로그아웃</button>
-                    </div>
-                </div>
-            `)
-        },
-        error: function (error) {
-            console.log('Error:', error);
-        }
-    })
-}
+
 
 
 

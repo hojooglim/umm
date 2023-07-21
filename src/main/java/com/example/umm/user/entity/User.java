@@ -27,6 +27,8 @@ public class User {
     private String nickname;
     private String myComment;
     private String myImage;
+    private Long kakaoId;
+    private Long naverId;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -62,5 +64,23 @@ public class User {
 
     public void updatePassword(String password) {
         this.password=password;
+    }
+
+    public User(String nickname, String encodedPassword, String email, UserRoleEnum role, Long kakaoId) {
+        this.email=email;
+        this.password=encodedPassword;
+        this.nickname=nickname;
+        this.role=role;
+        this.kakaoId=kakaoId;
+    }
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId=kakaoId;
+        return new User();
+    }
+
+    public User naverIdUpdate(Long naverId) {
+        this.naverId=naverId;
+        return new User();
     }
 }

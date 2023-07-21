@@ -66,12 +66,13 @@ public class User {
         this.password=password;
     }
 
-    public User(String nickname, String encodedPassword, String email, UserRoleEnum role, Long kakaoId) {
+    public User(String nickname, String encodedPassword, String email, UserRoleEnum role, Long kakaoId, Long naverId) {
         this.email=email;
         this.password=encodedPassword;
         this.nickname=nickname;
         this.role=role;
         this.kakaoId=kakaoId;
+        this.naverId=naverId;
     }
 
     public User kakaoIdUpdate(Long kakaoId) {

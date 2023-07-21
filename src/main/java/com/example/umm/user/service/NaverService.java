@@ -121,24 +121,22 @@ public class NaverService {
         User naverUser = userRepository.findByNaverId(naverId).orElse(null);
 
         if (naverUser == null) {
-            // 카카오 사용자 email 동일한 email 가진 회원이 있는지 확인
+
             String naverEmail = naverUserInfo.getEmail();
             User sameEmailUser = userRepository.findByEmail(naverEmail).orElse(null);
 
             if (sameEmailUser != null) {
                 naverUser = sameEmailUser;
-                // 기존 회원정보에 카카오 Id 추가
-                naverUser = naverUser.kakaoIdUpdate(naverId);
+
+                naverUser = naverUser.naverIdUpdate(naverId);
             } else {
-                // 신규 회원가입
-                // password: random UUID
+
                 String password = UUID.randomUUID().toString();
                 String encodedPassword = passwordEncoder.encode(password);
 
-                // email: kakao email
                 String email = naverUserInfo.getEmail();
 
-                naverUser = new User(naverUserInfo.getNickname(), encodedPassword, email, UserRoleEnum.USER, naverId);
+                naverUser = new User(naverUserInfo.getNickname(), encodedPassword, email, UserRoleEnum.USER,null, naverId);
             }
 
             userRepository.save(naverUser);

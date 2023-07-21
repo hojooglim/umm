@@ -64,7 +64,7 @@
                 <tr>
                     <td><a href="/profile" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">Umm</a>
                     </td>
-                    <td><a href="/reumm" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">저장됨</a>
+                    <td><a href="/reumm" class="logo" style="font-size: 10px; font-weight: 900; color: inherit; text-decoration:underline">저장됨</a>
                     </td>
                 </tr>
             </table>
@@ -99,9 +99,9 @@
                     </div>
 
                     <div style="margin-top: 7px">
-                    <button class="btn btn-black" style="font-size: 8px" id="like-btn">좋아요</button>
+                    <button class="btn btn-black" style="font-size: 8px" id="like-btn" th:onclick="likeIt([[${reumm.id}]])">좋아요</button>
                     <button class="btn btn-black" style="font-size: 8px" onclick="javascript:doDisplay();">댓글</button>
-                    <button class="btn btn-black" style="font-size: 8px" id="repost-btn">저장취소</button>
+                    <button class="btn btn-black" style="font-size: 8px" id="repost-btn" th:onclick="rePost([[${reumm.id}]])">저장취소</button>
                     </div>
 
                     <div id="myDIV" style= "display: none">
@@ -172,19 +172,28 @@
     }
 
     // 좋아요 기능/
-    const likeButton = document.getElementById('like-btn');
+    function likeIt(ummId){
+        $.ajax({
+            type: 'POST',
+            url: `/ummLike/`+ummId,
 
-    if (likeButton) {
-        likeButton.addEventListener('click', event => {
-            let umm_id = document.getElementById('umm-id').value;
-            fetch(`/ummLike/${umm_id}`, {
-                method: 'POST'
-            })
-                .then(() => {
-                    alert('좋아요 성공!');
-                    location.replace(`/reumm`);
-                });
-        });
+        }).done(function () {
+            alert("좋아요!")
+            location.replace(`/reumm`);
+        })
+    }
+
+    // repost 기능
+    function rePost(ummId){
+
+        $.ajax({
+            type: 'POST',
+            url: `/re-Umm/`+ummId,
+
+        }).done(function () {
+            alert("umm 저장취소")
+            location.replace(`/reumm`);
+        })
     }
 </script>
 <script type="text/javascript">

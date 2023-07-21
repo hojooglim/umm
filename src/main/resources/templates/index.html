@@ -56,9 +56,9 @@
                     </div>
 
                     <div style="margin-top: 7px">
-                    <button class="btn btn-black" style="font-size: 8px" id="like-btn">좋아요</button>
+                    <button class="btn btn-black" style="font-size: 8px" id="like-btn" th:onclick="likeIt([[${umm.id}]])">좋아요</button>
                     <button class="btn btn-black" style="font-size: 8px" onclick="javascript:doDisplay();">댓글</button>
-                    <button class="btn btn-black" style="font-size: 8px" id="repost-btn">저장</button>
+                    <button class="btn btn-black" style="font-size: 8px" id="repost-btn" th:onclick="rePost([[${umm.id}]])">저장</button>
                     </div>
 
                     <div id="myDIV" style= "display: none">
@@ -115,19 +115,31 @@
             con.style.display = 'none';
         }
     }
-    // 좋아요 기능/
-    const likeButton = document.getElementById('like-btn');
 
-    if (likeButton) {
-        likeButton.addEventListener('click', event => {
-            let umm_id = document.getElementById('umm-id').value;
-            fetch(`/ummLike/${umm_id}`, {
-                method: 'POST'
-            })
-                .then(() => {
-                    alert('좋아요 성공!');
-                    location.replace(`/`);
-                });
-        });
+    // 좋아요 기능/
+    function likeIt(ummId){
+
+
+        $.ajax({
+            type: 'POST',
+            url: `/ummLike/`+ummId,
+
+        }).done(function () {
+            alert("좋아요!")
+            location.replace(`/`);
+        })
+    }
+
+    // repost 기능
+    function rePost(ummId){
+
+        $.ajax({
+            type: 'POST',
+            url: `/re-Umm/`+ummId,
+
+        }).done(function () {
+            alert("umm 저장되었음")
+            location.replace(`/reumm`);
+        })
     }
 </script>

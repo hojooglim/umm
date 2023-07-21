@@ -8,6 +8,7 @@ $(document).ready(function () {
         });
         // showProfile();
     }
+
     //회원가입 /
     const signupButton = document.getElementById('signup-btn');
 
@@ -63,7 +64,7 @@ $(document).ready(function () {
         });
     }
 
-//인증코드 확인
+    //인증코드 확인
     const checkCodeButton = document.getElementById('checkCode-btn');
 
     if (checkCodeButton) {
@@ -92,7 +93,7 @@ $(document).ready(function () {
         });
     }
 
-    // 삭제 기능 /
+    // umm 삭제 기능 /
     const deleteButton = document.getElementById('delete-btn');
 
     if (deleteButton) {
@@ -110,22 +111,6 @@ $(document).ready(function () {
         });
     }
 
-
-    // repost 기능/
-    const repostButton = document.getElementById('repost-btn');
-
-    if (repostButton) {
-        repostButton.addEventListener('click', event => {
-            let umm_id = document.getElementById('umm-id').value;
-            fetch(`/re-Umm/${umm_id}`, {
-                method: 'POST'
-            })
-                .then(() => {
-                    alert('저장 성공!');
-                    location.replace(`/reumm`);
-                });
-        });
-    }
     //댓글 입력 기능/
     const commentButton = document.getElementById('comment-btn');
 
@@ -212,7 +197,6 @@ $(document).ready(function () {
         });
     }
 
-
     //비밀번호 확인
     const checkPasswordButton = document.getElementById('checkPassword-btn');
 
@@ -263,6 +247,7 @@ $(document).ready(function () {
                 });
         });
     }
+
     // 팔로우 기능/
     const followButton = document.getElementById('follow-btn');
 
@@ -282,7 +267,6 @@ $(document).ready(function () {
                 });
         });
     }
-
 
 
 })

@@ -99,28 +99,28 @@
                     </div>
 
                     <div style="margin-top: 7px">
-                    <button class="btn btn-black" style="font-size: 8px" id="like-btn" th:onclick="likeIt([[${reumm.id}]])">좋아요</button>
-                    <button class="btn btn-black" style="font-size: 8px" onclick="javascript:doDisplay();">댓글</button>
-                    <button class="btn btn-black" style="font-size: 8px" id="repost-btn" th:onclick="rePost([[${reumm.id}]])">저장취소</button>
+                        <button class="btn btn-black" style="font-size: 8px" id="like-btn" th:onclick="likeIt([[${reumm.id}]])">좋아요</button>
+                        <button class="btn btn-black" style="font-size: 8px" th:onclick="javascript:doDisplay([[${reumm.id}]]);">댓글</button>
+                        <button class="btn btn-black" style="font-size: 8px" id="repost-btn" th:onclick="rePost([[${reumm.id}]])">저장</button>
                     </div>
 
-                    <div id="myDIV" style= "display: none">
+                    <div th:id="'myDIV-'+${reumm.id}" style= "display: none">
+                        <input th:id="'comment'+${reumm.id}" style="font-size: 11px; font-weight: 600; color: inherit; width: 270px; border:none" placeholder="댓글을 입력해 주세요.">
+                        <button class="btn bnt-black" style="font-size: 2px" id="createCom-btn" th:onclick="create([[${reumm.id}]])">게시</button>
+
                         <div class="row-6" th:each="comment : ${reumm.commentList}">
-                            <input type="hidden" id="comment-id" th:value="${comment.getId()}">
+                            <input type="hidden" id="comment-id" th:value="${comment.id}">
                             <div>
                                 <span style="font-size: 7px; font-weight: 700; color: inherit" th:text="${comment.nickname}"></span>
                                 <div>
-                                    <input id="comment" style="font-size: 11px; font-weight: 500; color: inherit; border:none" th:value="${comment.comment}">
-                                    <button class="btn bnt-black" style="font-size: 2px" id="commentUpdate-btn">수정</button>
-                                    <button class="btn bnt-black" style="font-size: 2px" id="commentDelete-btn">삭제</button>
+                                    <input th:id="'comment'+${comment.id}" style="font-size: 11px; font-weight: 500; color: inherit; border:none" th:value="${comment.comment}">
+                                    <button class="btn bnt-black" style="font-size: 2px" th:onclick="updateComment([[${comment.id}]])">수정</button>
+                                    <button class="btn bnt-black" style="font-size: 2px" th:onclick="deleteComment([[${comment.id}]])">삭제</button>
                                 </div>
-
                             </div>
                         </div>
-                        <input id="comments" style="font-size: 11px; font-weight: 600; color: inherit; width: 270px; border:none" placeholder="댓글을 입력해 주세요.">
-                        <button class="btn bnt-black" style="font-size: 7px; color: dodgerblue" id="comment-btn">게시</button>
-                    </div>
 
+                    </div>
 
                 </div>
 
@@ -195,10 +195,60 @@
             location.replace(`/reumm`);
         })
     }
+
+    function create(ummId){
+
+        var commentElementId = "comment" + ummId;
+        var comment = $('#' + commentElementId).val();
+
+        $.ajax({
+            type: 'POST',
+            url: `/comments/`+ummId,
+            contentType: 'application/json',
+            data: JSON.stringify({ comment: comment }),
+        }).done(function () {
+            alert("댓글 작성 완료")
+            location.replace(`/reumm`);
+        })
+    }
+
+    function updateComment(commentId){
+
+        var commentElementId = "comment" + commentId;
+        var comment = $('#' + commentElementId).val();
+
+        $.ajax({
+            type: 'PUT',
+            url: `/comments/`+commentId,
+            contentType: 'application/json',
+            data: JSON.stringify({ comment: comment }),
+        }).done(function () {
+            alert("댓글 수정 완료")
+            location.replace(`/reumm`);
+        })
+    }
+
+    function deleteComment(commentId){
+
+        $.ajax({
+            type: 'Delete',
+            url: `/comments/`+commentId,
+        }).done(function () {
+            alert("댓글 삭제 완료")
+            location.replace(`/reumm`);
+        })
+    }
+
 </script>
+
+
+
+
 <script type="text/javascript">
-    var bDisplay = true; function doDisplay(){
-        var con = document.getElementById("myDIV");
+    var bDisplay = true; function doDisplay(ummId){
+        var commentContainerId = `myDIV-${ummId}`;
+        var con = document.getElementById(commentContainerId);
+
         if(con.style.display=='none'){
             con.style.display = 'block';
         }else{

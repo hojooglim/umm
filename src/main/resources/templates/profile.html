@@ -114,6 +114,8 @@
                     </div>
 
                          <div th:id="'myDIV-'+${umm.id}" style= "display: none">
+                             <input th:id="'comment'+${umm.id}" style="font-size: 11px; font-weight: 600; color: inherit; width: 270px; border:none" placeholder="댓글을 입력해 주세요.">
+                             <button class="btn bnt-black" style="font-size: 2px" id="createCom-btn" th:onclick="create([[${umm.id}]])">게시</button>
 
                             <div class="row-6" th:each="comment : ${umm.commentList}">
                                 <input type="hidden" id="comment-id" th:value="${comment.id}">
@@ -127,12 +129,6 @@
                                 </div>
                             </div>
 
-                             <input type="hidden" id="umm-id" th:value="${umm.id}">
-                            <input id="comments" style="font-size: 11px; font-weight: 600; color: inherit; width: 270px; border:none" placeholder="댓글을 입력해 주세요.">
-                            <button class="btn bnt-black" style="font-size: 7px; color: dodgerblue" id="profilecomment-btn">게시</button>
-
-                             <input th:id="'comment'+${umm.id}" style="font-size: 11px; font-weight: 600; color: inherit; width: 270px; border:none" placeholder="댓글을 입력해 주세요.">
-                             <button class="btn bnt-black" style="font-size: 2px" th:onclick="createComment([[${umm.id}]])">게시</button>
                         </div>
 
                 </div>
@@ -212,40 +208,18 @@
     }
 
 
-    //댓글 입력 기능/
-    const commentButton = document.getElementById('profilecomment-btn');
+    function create(ummId){
 
-    if (commentButton) {
-        commentButton.addEventListener('click', event => {
-            let id = document.getElementById('umm-id').value;
-            fetch(`/comments/${id}`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    comment: document.getElementById('comments').value,
-                })
-            })
-                .then(() => {
-                    alert('댓글달기 성공!');
-                    location.replace('/profile');
-                });
-        });
-    }
-
-    function createComment(ummId){
-        var id = ummId
         var commentElementId = "comment" + ummId;
         var comment = $('#' + commentElementId).val();
 
         $.ajax({
             type: 'POST',
-            url: `/comments/`+id,
+            url: `/comments/`+ummId,
             contentType: 'application/json',
             data: JSON.stringify({ comment: comment }),
         }).done(function () {
-            alert("수정 완료")
+            alert("댓글 작성 완료")
             location.replace(`/profile`);
         })
     }
@@ -261,7 +235,7 @@
             contentType: 'application/json',
             data: JSON.stringify({ comment: comment }),
         }).done(function () {
-            alert("수정 완료")
+            alert("댓글 수정 완료")
             location.replace(`/profile`);
         })
     }
@@ -272,7 +246,7 @@
             type: 'Delete',
             url: `/comments/`+commentId,
         }).done(function () {
-            alert("삭제 완료")
+            alert("댓글 삭제 완료")
             location.replace(`/profile`);
         })
     }

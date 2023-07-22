@@ -6,7 +6,7 @@ $(document).ready(function () {
         $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
             jqXHR.setRequestHeader('Authorization', auth);
         });
-        // showProfile();
+
     }
 
     //회원가입 /
@@ -107,69 +107,6 @@ $(document).ready(function () {
                 .then(() => {
                     alert('삭제가 완료되었습니다.');
                     location.replace('/profile');
-                });
-        });
-    }
-
-    //댓글 입력 기능/
-    const commentButton = document.getElementById('comment-btn');
-
-    if (commentButton) {
-        commentButton.addEventListener('click', event => {
-            let id = document.getElementById('umm-id').value;
-            fetch(`/comments/${id}`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    comment: document.getElementById('comments').value,
-                })
-            })
-                .then(() => {
-                    alert('댓글달기 성공!');
-                    location.replace('/');
-                });
-        });
-    }
-
-    // 댓글 수정 기능 /
-    const commentUpdateButton = document.getElementById('commentUpdate-btn');
-
-    if (commentUpdateButton) {
-        commentUpdateButton.addEventListener('click', event => {
-            let id = document.getElementById('comment-id').value;
-
-            fetch(`/comments/${id}`, {
-                method: 'PUT',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    comment: document.getElementById('comment').value,
-                })
-            })
-                .then(() => {
-                    alert('수정이 완료되었습니다.');
-
-                    location.replace(`/`);
-                });
-        });
-    }
-
-    // 댓글 삭제 기능 /
-    const commentDeleteButton = document.getElementById('commentDelete-btn');
-
-    if (commentDeleteButton) {
-        commentDeleteButton.addEventListener('click', event => {
-            let id = document.getElementById('comment-id').value;
-
-            fetch(`/comments/${id}`, {
-                method: 'DELETE'
-            })
-                .then(() => {
-                    alert('삭제가 완료되었습니다.');
-                    location.replace('/');
                 });
         });
     }

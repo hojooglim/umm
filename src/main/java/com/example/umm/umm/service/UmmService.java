@@ -8,12 +8,15 @@ import com.example.umm.umm.entity.ReUmm;
 import com.example.umm.umm.entity.Umm;
 import com.example.umm.umm.repository.ReUmmRepository;
 import com.example.umm.umm.repository.UmmRepository;
+import com.example.umm.user.entity.UserRoleEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +43,15 @@ public class UmmService {
         Umm umm = ummRepository.findById(ummId).orElseThrow(
                 ()->new NullPointerException("not found umm")
         );
-        if(!umm.getUser().getId().equals(userDetails.getUser().getId())){
+        if(!umm.getUser().getId().equals(userDetails.getUser().getId())  ){
+            if(userDetails.getUser().getRole() == UserRoleEnum.ADMIN){
+                if (image != null) {
+                    String imageUrl = awsS3UpLoader.upload(image, "image");
+                    umm.update(contents,imageUrl);
+                } else{
+                    umm.update(contents);
+                }
+            }
             throw new IllegalArgumentException("권한이 없습니다.");
         }
         if (image != null) {
@@ -69,7 +80,14 @@ public class UmmService {
     }
 
     public List<UmmResponseDto> getUmmList() {
-       return ummRepository.findAllByOrderByCreatedAtDesc().stream().map(UmmResponseDto::new).toList();
+        List<Umm> ummList = ummRepository.findAllByOrderByCreatedAtDesc();
+        List<UmmResponseDto> ummListDto = new ArrayList<>();
+        for (Umm umm : ummList) {
+            ummListDto.add(new UmmResponseDto(umm));
+        }
+        Collections.reverse(ummList);
+
+        return ummListDto;
     }
 
     public void reUmm(Long ummId, UserDetailsImpl userDetails) {

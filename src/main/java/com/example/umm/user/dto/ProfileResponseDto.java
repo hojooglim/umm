@@ -8,6 +8,7 @@ import com.example.umm.umm.entity.Umm;
 import com.example.umm.user.entity.User;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,7 @@ public class ProfileResponseDto {
     private String role;
     private String myComment;
     private String myImage;
+    private LocalDate createdAt;
     private int followUsers;
     private int ummCount;
     private int commentCount;
@@ -34,6 +36,7 @@ public class ProfileResponseDto {
         this.role=user.getRole().toString();
         this.myComment=user.getMyComment();
         this.myImage=user.getMyImage();
+        this.createdAt=user.getCreatedAt();
         this.followUsers=user.getFollowList().size();
         this.ummCount=user.getUmmList().size();
         this.commentCount=user.getCommentList().size();

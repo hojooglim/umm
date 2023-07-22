@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -25,13 +26,11 @@ public abstract class Timestamped {
     //객체가 생성되서 저장될떄 시간값이 자동으로 저장됨, 최조값만.
     @Column(updatable = false)
     //그 이후에는 없데이트가 안되게 주는 옵션.
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @LastModifiedDate
     //조회한 앤티티 값을 변경할때 변경한 시간이 저장됨. 당연히 처음값도 저장이됨.
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
     //자바의 data,캘랜더 같은 타입을 맵핑할 때 사용함.
-    private LocalDateTime modifiedAt;
+    private LocalDate modifiedAt;
 }

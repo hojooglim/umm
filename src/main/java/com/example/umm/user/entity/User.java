@@ -3,12 +3,11 @@ package com.example.umm.user.entity;
 import com.example.umm.comment.entity.Comment;
 import com.example.umm.follow.entity.Follow;
 import com.example.umm.umm.entity.ReUmm;
+import com.example.umm.umm.entity.Timestamped;
 import com.example.umm.umm.entity.Umm;
-import com.example.umm.user.dto.ProfileRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class User {
+public class User extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

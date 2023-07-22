@@ -104,4 +104,10 @@ public class ViewController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/block")
+    public String block() {
+        return "block"; // blocked.html을 찾아서 렌더링
+    }
+
 }

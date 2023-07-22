@@ -105,6 +105,7 @@ public class AdminService {
         }
     }
 
+    @Transactional
     public void updateUmm(UserDetailsImpl userDetails, Long ummId, MultipartFile image, String contents) throws IOException {
         if(userDetails.getUser().getRole() == UserRoleEnum.ADMIN){
             Umm umm = ummRepository.findById(ummId).orElseThrow(

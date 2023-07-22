@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -30,7 +29,7 @@ public class UmmResponseDto {
         this.image=umm.getImage();
         this.contents=umm.getContents();
         this.myImage=umm.getUser().getMyImage();
-        this.createdAt=umm.getCreatedAt().toLocalDate();
+        this.createdAt=umm.getCreatedAt();
         this.LikeItUmmCount=umm.getLikeItList().size();
         this.commentList=umm.getCommentList().stream().map(CommentResponseDto::new).toList();
         this.commentCount=umm.getCommentList().size();

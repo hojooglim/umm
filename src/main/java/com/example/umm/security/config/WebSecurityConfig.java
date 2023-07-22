@@ -61,6 +61,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/user/login-page").permitAll());

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>umm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+    <script src="/js/basic.js"></script>
+    <style>
+        #footer {
+            position: fixed;
+            background-color: white;
+            left: 300px;
+            right: 300px;
+            bottom: 0;
+            height: 4rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            border-bottom: 1px solid #444444;
+            padding: 10px;
+        }
+        *{margin:0; padding:0;}
+        a{text-decoration:none;}
+        .wrap{padding:10px;}
+
+        .btn_open{font-weight:bold; margin:5px; padding:4px 6px; background:white; color:#fff;}
+        .pop_wrap{position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.5); font-size:0; text-align:center;}
+        .pop_wrap:after{display:inline-block; height:100%; vertical-align:middle; content:'';}
+        .pop_wrap .pop_inner{display:inline-block; padding:20px 30px; background:#fff; width:600px; vertical-align:middle; font-size:15px;}
+    </style>
+</head>
+
+<body style="margin: 100px auto; width: 400px;">
+
+<header class="p-3">
+    <a class="logo" href="/" style="font-weight: 900; color: inherit">Umm admin</a>
+</header>
+
+<div class="container flex-grow-1 p-0" >
+
+    <div class="d-flex flex-column">
+
+        <div class="flex-grow-1 p-3" >
+
+
+                <a href="#pop_info_1" class="btn_open" style="font-size: 13px; font-weight: 200; color: inherit" >유저리스트</a><br>
+
+                <table>
+                    <tr>
+                        <td>
+                            <a href="/profile" class="logo" style="font-size: 10px; font-weight: 900; color: inherit; text-decoration:underline">Umm</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+
+            <div id="pop_info_1" class="pop_wrap" style="display:none;">
+                <div class="pop_inner">
+
+                        <table>
+
+                            <thead>
+                            <tr>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">username</th>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">emil</th>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">role</th>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">글 갯수</th>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">댓글 갯수</th>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">-</th>
+                            </tr>
+                            </thead>
+
+                                <tbody>
+                                <tr th:each="user, i: ${userList}">
+                                    <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${user.nickname}"></td>
+                                    <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${user.email}"></td>
+                                    <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${user.role}"></td>
+                                    <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${user.ummCount}"></td>
+                                    <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${user.commentCount}"></td>
+                                    <td>
+                                        <a style="font-size: 12px; font-weight: 600; color: inherit" th:href ="@{/updateProfile/{user_id}(user_id=${user.userid})}"
+                                           >수정</a>
+                                        <button class="btn bnt-black" style="font-size: 2px" th:onclick="deleteUser([[${user.userid}]])">삭제</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+
+                        </table><br>
+
+                    <button type="button"  style="font-size: 10px" class="btn btn-outline-dark">닫기</button>
+
+                </div>
+            </div>
+
+
+
+
+    </div>
+
+</div>
+
+<div id="footer">
+    <table>
+        <tr>
+            <td><a href="/" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">home</a>
+            </td>
+            <td><a href="/umm" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">new Umm</a>
+            </td>
+            <td><a href="/profile" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">User</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+
+</html>
+<script>
+    var target = document.querySelectorAll('.btn_open');
+    var btnPopClose = document.querySelectorAll('.pop_wrap .btn-outline-dark');
+    var targetID;
+
+    // 팝업 열기
+    for(var i = 0; i < target.length; i++){
+        target[i].addEventListener('click', function(){
+            targetID = this.getAttribute('href');
+            document.querySelector(targetID).style.display = 'block';
+        });
+    }
+
+    // 팝업 닫기
+    for(var j = 0; j < target.length; j++){
+        btnPopClose[j].addEventListener('click', function(){
+            this.parentNode.parentNode.style.display = 'none';
+        });
+    }
+
+
+    function deleteUser(userid){
+
+        $.ajax({
+            type: 'Delete',
+            url: `/admin/userInfo/`+userid,
+        }).done(function () {
+            alert("유저 삭제 완료")
+            location.replace(`/admin`);
+        })
+    }
+</script>
+
+

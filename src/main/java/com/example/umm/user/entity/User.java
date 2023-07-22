@@ -1,5 +1,6 @@
 package com.example.umm.user.entity;
 
+import com.example.umm.comment.entity.Comment;
 import com.example.umm.follow.entity.Follow;
 import com.example.umm.umm.entity.ReUmm;
 import com.example.umm.umm.entity.Umm;
@@ -43,6 +44,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<ReUmm> ReUmmList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> CommentList = new ArrayList<>();
 
     public User(String email, String password, String nickname, UserRoleEnum role) {
         this.email=email;

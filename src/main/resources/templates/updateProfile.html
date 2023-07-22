@@ -33,7 +33,9 @@
 
 <header class="p-3">
     <a href="/profile" class="logo" style="font-weight: 900; color: inherit">취소</a>
-    <button type="button" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark"  onclick="update()">완료</button>
+    <input type="hidden" id="user_id" th:value="__${user_id}__">
+    <button type="button" th:if="__${user_id}__ != null" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark" onclick="adminUpdate()">수정</button>
+    <button type="button" th:if="__${user_id}__ == null" style="width: 50px; float:right; font-size: 12px" class="btn btn-outline-dark"  onclick="update()">완료</button>
 </header>
 
 <div class="container flex-grow-1 p-0" >
@@ -101,6 +103,33 @@
         }).done(function () {
             alert("프로필 수정 완료")
             location.replace(`/profile`);
+        })
+    }
+
+    function adminUpdate(){
+
+        let id = $('#user_id').val();
+
+        let nickname = $('#nickname').val();
+        let myComment = $('#myComment').val();
+
+        let imageInput = document.getElementById('image1');
+        let image = imageInput.files[0];
+        let formData = new FormData();
+        formData.append("nickname", nickname);
+        formData.append("myComment", myComment);
+        if (image !== 'undefined') {
+            formData.append("image", image)
+        }
+        $.ajax({
+            type: "PUT",
+            url: `/admin/userInfo/${id}`,
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(function () {
+            alert("프로필 수정 완료")
+            location.replace(`/admin`);
         })
     }
 </script>

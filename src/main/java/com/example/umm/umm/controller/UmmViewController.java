@@ -1,8 +1,11 @@
 package com.example.umm.umm.controller;
 
+import com.example.umm.security.filter.UserDetailsImpl;
 import com.example.umm.umm.dto.UmmResponseDto;
 import com.example.umm.umm.service.UmmService;
+import com.example.umm.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +19,10 @@ import java.util.List;
 public class UmmViewController {
     private final UmmService ummService;
     @GetMapping("/")
-    public String home(Model model){
+    public String home(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        if(userDetails.getUser().getRole()== UserRoleEnum.GUEST){
+            return "block";
+        }
         List<UmmResponseDto> ummList = ummService.getUmmList();
         model.addAttribute("ummList",ummList);
         return "index";

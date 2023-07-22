@@ -87,4 +87,8 @@ public class User extends Timestamped {
         this.naverId=naverId;
         return new User();
     }
+
+    public void updateRole(UserRoleEnum userRoleEnum) {
+        this.role=userRoleEnum;
+    }
 }

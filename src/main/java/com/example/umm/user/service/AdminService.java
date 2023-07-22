@@ -80,6 +80,7 @@ public class AdminService {
             User user = userRepository.findById(userId).orElseThrow(
                     ()-> new NullPointerException("회원이 없습니다.")
             );
+            user.updateRole(UserRoleEnum.GUEST);
         } else {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }

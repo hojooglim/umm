@@ -30,7 +30,7 @@ public class ReUmmResponseDto {
         this.image=reUmm.getUmm().getImage();
         this.myImage=reUmm.getUmm().getUser().getMyImage();
         this.contents=reUmm.getUmm().getContents();
-        this.createdAt=reUmm.getUmm().getCreatedAt().toLocalDate();
+        this.createdAt=reUmm.getUmm().getCreatedAt();
         this.LikeItUmmCount=reUmm.getUmm().getLikeItList().size();
         this.commentList=reUmm.getUmm().getCommentList().stream().map(CommentResponseDto::new).toList();
         this.commentCount=reUmm.getUmm().getCommentList().size();

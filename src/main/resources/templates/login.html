@@ -32,6 +32,29 @@
             font-style: normal;
             color: #414141;
         }
+        #login-naver-btn {
+            border-width: 0;
+            margin: 10px 0 8px;
+            width: 300px;
+            height: 40px;
+            flex-grow: 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            /*margin: 0 0 8px;*/
+            padding: 11px 12px;
+            border-radius: 5px;
+            background-color: limegreen;
+
+            font-family: SpoqaHanSansNeo;
+            font-size: 15px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            color: #414141;
+        }
     </style>
 </head>
 <body>
@@ -52,8 +75,10 @@
                     자동 로그인 <input name="remember-me" id="rememberMe" type="checkbox" th:checked="${rememeberMe}">
                 </label>
                 <div class="mb-3">
-                    <button id="login-kakao-btn" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=af3cc89cbdd26b6503dea63f7578dfbb&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code'">
-                        카카오로 로그인하기 </button>
+                    <button id="login-kakao-btn" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=af3cc89cbdd26b6503dea63f7578dfbb&redirect_uri=http://localhost:8080/user/kakao/callback&response_type=code'">
+                        카카오 로그인 </button>
+                    <button id="login-naver-btn" onclick="location.href='https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=Ozcke13trfXHYn3M1Jf1&redirect_uri=http://localhost:8080/user/naver/callback&state=1234'">
+                        네이버 로그인 </button>
                 </div>
                 <div><br><br><br><br>
                     <p>계정이 없으신가요? <a href="/user/signup-page" class="logo" style="font-weight: 400; color:dodgerblue">가입하기</a></p>

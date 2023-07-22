@@ -3,6 +3,7 @@ package com.example.umm.security.config;
 
 import com.example.umm.security.filter.JwtAuthenticationFilter;
 import com.example.umm.security.filter.JwtAuthorizationFilter;
+import com.example.umm.security.filter.RememberMeService;
 import com.example.umm.security.filter.UserDetailsServiceImpl;
 import com.example.umm.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class WebSecurityConfig {
     private final JwtUtil jwtUtil;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final UserDetailsServiceImpl userDetailsService;
+    private final RememberMeService rememberMeService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -51,16 +53,13 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilter(jwtAuthenticationFilter())
                 .addFilterAfter(jwtAuthorizationFilter(), JwtAuthenticationFilter.class)
-                .rememberMe(rememberMe -> rememberMe
-                        .key("key")
-                        .rememberMeParameter("remember-me")
-                        .tokenValiditySeconds(86400 * 30)
-                        .userDetailsService(userDetailsService))
+                .rememberMe(configurer -> configurer.rememberMeServices(rememberMeService))
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/user/login-page").permitAll());

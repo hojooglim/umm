@@ -56,13 +56,13 @@
             <a href="#pop_info_1" class="btn_open" style="font-size: 13px; font-weight: 200; color: inherit" th:text="팔로잉+${profile.followUsers}+명"></a><br>
             <p></p>
             <button type="button" th:if="__${user_id}__ == null" style="width: 180px; float:left; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/updateProfile'">프로필 수정</button>
-            <button type="button" th:if="__${user_id}__ == null" style="width: 180px; float:right; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/user/introduce'">비밀번호 수정</button>
+            <button type="button" th:if="__${user_id}__ == null" style="width: 180px; float:right; font-size: 12px" class="btn btn-outline-dark" onclick="location.href='/updatePassword'">비밀번호 수정</button>
             <button type="button" th:if="__${user_id}__ != null" style="width: 360px; float:right; font-size: 12px" class="btn btn-outline-dark" id="follow-btn">팔로우</button><br><br>
 <!--            pathval == profil.getfollist.id -> 언팔 못함-->
             <input type="hidden" id="user-id" th:value="__${user_id}__">
             <table>
                 <tr>
-                    <td><a href="/profile" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">Umm</a>
+                    <td><a href="/profile" class="logo" style="font-size: 10px; font-weight: 900; color: inherit; text-decoration:underline">Umm</a>
                     </td>
                     <td  th:if="__${user_id}__ == null"><a href="/reumm" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">저장됨</a>
                     </td>
@@ -87,7 +87,7 @@
 
         <div class="p-3">
             <div style="margin-top: 10px; margin-left: 10px"  th:each = "umm : ${profile.ummList}">
-                <input type="hidden" id="umm-id" th:value="${umm.id}">
+
                 <img  style="width:30px;" th:src="${umm.myImage}">
                 <a style="font-size: 12px; font-weight: 600; color: inherit" th:href ="@{/profile/{user_id}(user_id=${umm.user_id})}"
                    th:text="${umm.nickname}"></a>
@@ -108,25 +108,27 @@
 
 
                     <div style="margin-top: 7px">
-                    <button class="btn btn-black" style="font-size: 8px" id="like-btn">좋아요</button>
-                    <button class="btn btn-black" style="font-size: 8px" onclick="javascript:doDisplay();">댓글</button>
-                    <button class="btn btn-black" style="font-size: 8px" id="repost-btn">저장</button>
+                    <button class="btn btn-black" style="font-size: 8px" id="like-btn" th:onclick="likeIt([[${umm.id}]])">좋아요</button>
+                    <button class="btn btn-black" style="font-size: 8px" th:onclick="javascript:doDisplay([[${umm.id}]]);">댓글</button>
+                    <button class="btn btn-black" style="font-size: 8px" id="repost-btn" th:onclick="rePost([[${umm.id}]])">저장</button>
                     </div>
 
-                         <div id="myDIV" style= "display: none">
+                         <div th:id="'myDIV-'+${umm.id}" style= "display: none">
+                             <input th:id="'comment'+${umm.id}" style="font-size: 11px; font-weight: 600; color: inherit; width: 270px; border:none" placeholder="댓글을 입력해 주세요.">
+                             <button class="btn bnt-black" style="font-size: 2px" id="createCom-btn" th:onclick="create([[${umm.id}]])">게시</button>
+
                             <div class="row-6" th:each="comment : ${umm.commentList}">
-                                <input type="hidden" id="comment-id" th:value="${comment.getId()}">
+                                <input type="hidden" id="comment-id" th:value="${comment.id}">
                                 <div>
                                     <span style="font-size: 7px; font-weight: 700; color: inherit" th:text="${comment.nickname}"></span>
                                     <div>
-                                    <input id="comment" style="font-size: 11px; font-weight: 500; color: inherit; border:none" th:value="${comment.comment}">
-                                        <button class="btn bnt-black" style="font-size: 2px" id="profilecommentUpdate-btn">수정</button>
-                                        <button class="btn bnt-black" style="font-size: 2px" id="profilecommentDelete-btn">삭제</button>
+                                    <input th:id="'comment'+${comment.id}" style="font-size: 11px; font-weight: 500; color: inherit; border:none" th:value="${comment.comment}">
+                                        <button class="btn bnt-black" style="font-size: 2px" th:onclick="updateComment([[${comment.id}]])">수정</button>
+                                        <button class="btn bnt-black" style="font-size: 2px" th:onclick="deleteComment([[${comment.id}]])">삭제</button>
                                     </div>
                                 </div>
                             </div>
-                            <input id="comments" style="font-size: 11px; font-weight: 600; color: inherit; width: 270px; border:none" placeholder="댓글을 입력해 주세요.">
-                            <button class="btn bnt-black" style="font-size: 7px; color: dodgerblue" id="profilecomment-btn">게시</button>
+
                         </div>
 
                 </div>
@@ -179,89 +181,86 @@
         });
     }
 
-    // 좋아요 기능/
-    const likeButton = document.getElementById('like-btn');
+    //좋아요 기능
+    function likeIt(ummId){
 
-    if (likeButton) {
-        likeButton.addEventListener('click', event => {
-            let umm_id = document.getElementById('umm-id').value;
-            fetch(`/ummLike/${umm_id}`, {
-                method: 'POST'
-            })
-                .then(() => {
-                    alert('좋아요 성공!');
-                    location.replace(`/profile`);
-                });
-        });
-    }
-    //댓글 입력 기능/
-    const commentButton = document.getElementById('profilecomment-btn');
+        $.ajax({
+            type: 'POST',
+            url: `/ummLike/`+ummId,
 
-    if (commentButton) {
-        commentButton.addEventListener('click', event => {
-            let id = document.getElementById('umm-id').value;
-            fetch(`/comments/${id}`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    comment: document.getElementById('comments').value,
-                })
-            })
-                .then(() => {
-                    alert('댓글달기 성공!');
-                    location.replace('/profile');
-                });
-        });
+        }).done(function () {
+            alert("좋아요!")
+            location.replace(`/profile`);
+        })
     }
 
-    // 댓글 수정 기능 /
-    const commentUpdateButton = document.getElementById('profilecommentUpdate-btn');
+    // repost 기능
+    function rePost(ummId){
 
-    if (commentUpdateButton) {
-        commentUpdateButton.addEventListener('click', event => {
-            let id = document.getElementById('comment-id').value;
+        $.ajax({
+            type: 'POST',
+            url: `/re-Umm/`+ummId,
 
-            fetch(`/comments/${id}`, {
-                method: 'PUT',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    comment: document.getElementById('comment').value,
-                })
-            })
-                .then(() => {
-                    alert('수정이 완료되었습니다.');
-
-                    location.replace('/profile');
-                });
-        });
+        }).done(function () {
+            alert("umm 저장되었음")
+            location.replace(`/reumm`);
+        })
     }
 
-    // 댓글 삭제 기능 /
-    const commentDeleteButton = document.getElementById('profilecommentDelete-btn');
 
-    if (commentDeleteButton) {
-        commentDeleteButton.addEventListener('click', event => {
-            let id = document.getElementById('comment-id').value;
+    function create(ummId){
 
-            fetch(`/comments/${id}`, {
-                method: 'DELETE'
-            })
-                .then(() => {
-                    alert('삭제가 완료되었습니다.');
-                    location.replace('/profile');
-                });
-        });
+        var commentElementId = "comment" + ummId;
+        var comment = $('#' + commentElementId).val();
+
+        $.ajax({
+            type: 'POST',
+            url: `/comments/`+ummId,
+            contentType: 'application/json',
+            data: JSON.stringify({ comment: comment }),
+        }).done(function () {
+            alert("댓글 작성 완료")
+            location.replace(`/profile`);
+        })
+    }
+
+    function updateComment(commentId){
+
+        var commentElementId = "comment" + commentId;
+        var comment = $('#' + commentElementId).val();
+
+        $.ajax({
+            type: 'PUT',
+            url: `/comments/`+commentId,
+            contentType: 'application/json',
+            data: JSON.stringify({ comment: comment }),
+        }).done(function () {
+            alert("댓글 수정 완료")
+            location.replace(`/profile`);
+        })
+    }
+
+    function deleteComment(commentId){
+
+        $.ajax({
+            type: 'Delete',
+            url: `/comments/`+commentId,
+        }).done(function () {
+            alert("댓글 삭제 완료")
+            location.replace(`/profile`);
+        })
     }
 
 </script>
 
+
+
+
 <script type="text/javascript">
-    var bDisplay = true; function doDisplay(){
-        var con = document.getElementById("myDIV");
+    var bDisplay = true; function doDisplay(ummId){
+        var commentContainerId = `myDIV-${ummId}`;
+        var con = document.getElementById(commentContainerId);
+
         if(con.style.display=='none'){
             con.style.display = 'block';
         }else{

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>umm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/basic.js"></script>
+    <style>
+        #footer {
+            position: fixed;
+            background-color: white;
+            left: 300px;
+            right: 300px;
+            bottom: 0;
+            height: 4rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            border-bottom: 1px solid #444444;
+            padding: 10px;
+        }
+        *{margin:0; padding:0;}
+        a{text-decoration:none;}
+        .wrap{padding:10px;}
+
+        .btn_open{font-weight:bold; margin:5px; padding:4px 6px; background:white; color:#fff;}
+        .pop_wrap{position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.5); font-size:0; text-align:center;}
+        .pop_wrap:after{display:inline-block; height:100%; vertical-align:middle; content:'';}
+        .pop_wrap .pop_inner{display:inline-block; padding:20px 30px; background:#fff; width:600px; vertical-align:middle; font-size:15px;}
+    </style>
+</head>
+
+<body style="margin: 100px auto; width: 400px;">
+
+<header class="p-3">
+    <a class="logo" href="/" style="font-weight: 900; color: inherit">Umm admin</a>
+</header>
+
+<div class="container flex-grow-1 p-0" >
+
+    <div class="d-flex flex-column">
+
+        <div class="flex-grow-1 p-3" >
+
+
+                <a href="#pop_info_1" class="btn_open" style="font-size: 13px; font-weight: 200; color: inherit" >유저리스트</a><br>
+                <a href="#pop_info_2" class="btn_open" style="font-size: 13px; font-weight: 200; color: inherit" >게시글리스트</a><br>
+
+                <table>
+                    <tr>
+                        <td>
+                            <div>
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div>
+                                <canvas id="myChart2"></canvas>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+
+
+
+            <script th:inline="javascript">
+                var dailySignupCountList = [[${dailySignupCountList}]]; // Thymeleaf 표현식 사용
+                var dailyUmmCountList = [[${dailyUmmCountList}]]; // Thymeleaf 표현식 사용
+            </script>
+
+
+            <script th:inline="javascript">
+                // JavaScript에서 dailySignupCountList 사용하여 차트의 labels에 데이터 넣기
+                var labels = dailySignupCountList.map(function(item) {
+                    return item.joinDate;
+                });
+
+                // 차트 생성 및 설정
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels, // labels에 일자 데이터 할당
+                        datasets: [{
+                            label: '일자별 가입 회원수',
+                            data: dailySignupCountList.map(function(item) {
+                                return item.signUpCount;
+                            }),
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgba(54, 162, 235, 0.5)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                // JavaScript에서 dailySignupCountList 사용하여 차트의 labels에 데이터 넣기
+                var labels2 = dailyUmmCountList.map(function(item) {
+                    return item.joinDate;
+                });
+
+                // 차트 생성 및 설정
+                var ctx2 = document.getElementById('myChart2').getContext('2d');
+                var myChart2 = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: labels2, // labels에 일자 데이터 할당
+                        datasets: [{
+                            label: '일자별 게시글 생성수',
+                            data: dailyUmmCountList.map(function(item) {
+                                return item.ummCount;
+                            }),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            </script>
+
+
+        </div>
+
+
+            <div id="pop_info_1" class="pop_wrap" style="display:none;">
+                <div class="pop_inner">
+
+                        <table>
+
+                            <thead>
+                            <tr>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">username</th>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">emil</th>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">role</th>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">글 개수</th>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">댓글 개수</th>
+                                <th style="font-size: 10px; font-weight: 900; color: inherit">-</th>
+                            </tr>
+                            </thead>
+
+                                <tbody>
+                                <tr th:each="user, i: ${userList}">
+                                    <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${user.nickname}"></td>
+                                    <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${user.email}"></td>
+                                    <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${user.role}"></td>
+                                    <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${user.ummCount}"></td>
+                                    <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${user.commentCount}"></td>
+                                    <td>
+                                        <a style="font-size: 12px; font-weight: 600; color: inherit" th:href ="@{/updateProfile/{user_id}(user_id=${user.userid})}"
+                                           >수정</a>
+                                        <button class="btn bnt-black" style="font-size: 12px; color: red" th:onclick="deleteUser([[${user.userid}]])">삭제</button>
+                                        <button class="btn bnt-black" style="font-size: 12px; color: red" th:onclick="blockUser([[${user.userid}]])">차단</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+
+                        </table><br>
+
+                    <button type="button"  style="font-size: 10px" class="btn btn-outline-dark">닫기</button>
+
+                </div>
+            </div>
+
+        <div id="pop_info_2" class="pop_wrap" style="display:none;">
+            <div class="pop_inner">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th style="font-size: 10px; font-weight: 900; color: inherit">id</th>
+                        <th style="font-size: 10px; font-weight: 900; color: inherit">작성자</th>
+                        <th style="font-size: 10px; font-weight: 900; color: inherit">글 생성 일자</th>
+                        <th style="font-size: 10px; font-weight: 900; color: inherit">댓글 개수</th>
+                        <th style="font-size: 10px; font-weight: 900; color: inherit">좋아요 개수</th>
+                        <th style="font-size: 10px; font-weight: 900; color: inherit">-</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="umm, i: ${ummList}">
+                        <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${umm.id}"></td>
+                        <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${umm.nickname}"></td>
+                        <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${umm.createdAt}"></td>
+                        <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${umm.commentCount}"></td>
+                        <td style="font-size: 10px; font-weight: 900; color: inherit" th:text="${umm.likeItUmmCount}"></td>
+                        <td>
+                            <button class="btn bnt-black" style="font-size: 12px; font-weight: 600; color: inherit" th:onclick="|location.href='@{/umm?umm_id={umm_id}(umm_id=${umm.id})}'|"
+                            >수정</button>
+                            <button class="btn bnt-black" style="font-size: 12px; color: red" th:onclick="deleteUmm([[${umm.id}]])">삭제</button>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table><br>
+
+                <button type="button"  style="font-size: 10px" class="btn btn-outline-dark">닫기</button>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<div id="footer">
+    <table>
+        <tr>
+            <td><a href="/" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">home</a>
+            </td>
+            <td><a href="/umm" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">new Umm</a>
+            </td>
+            <td><a href="/profile" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">User</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+
+</html>
+<script>
+    var target = document.querySelectorAll('.btn_open');
+    var btnPopClose = document.querySelectorAll('.pop_wrap .btn-outline-dark');
+    var targetID;
+
+    // 팝업 열기
+    for(var i = 0; i < target.length; i++){
+        target[i].addEventListener('click', function(){
+            targetID = this.getAttribute('href');
+            document.querySelector(targetID).style.display = 'block';
+        });
+    }
+
+    // 팝업 닫기
+    for(var j = 0; j < target.length; j++){
+        btnPopClose[j].addEventListener('click', function(){
+            this.parentNode.parentNode.style.display = 'none';
+        });
+    }
+
+
+    function deleteUser(userid){
+
+        $.ajax({
+            type: 'Delete',
+            url: `/admin/userInfo/`+userid,
+        }).done(function () {
+            alert("유저 삭제 완료")
+            location.replace(`/admin`);
+        })
+    }
+
+    function blockUser(userid){
+
+        $.ajax({
+            type: 'PUT',
+            url: `/admin/userInfo/auth/`+userid,
+        }).done(function () {
+            alert("유저 차단 완료")
+            location.replace(`/admin`);
+        })
+    }
+
+    function deleteUmm(ummid){
+
+        $.ajax({
+            type: 'Delete',
+            url: `/admin/umm/`+ummid,
+        }).done(function () {
+            alert("유저 삭제 완료")
+            location.replace(`/admin`);
+        })
+    }
+</script>
+
+

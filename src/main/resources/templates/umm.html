@@ -29,6 +29,7 @@
         }
     </style>
 </head>
+
 <body style="margin: 100px auto; width: 400px;">
 
 <header class="p-3">
@@ -52,6 +53,7 @@
                 <section class="mb-5">
                     <label>텍스트</label>
                     <textarea class="form-control h-25" rows="10" placeholder="+작성할 내용을 입력하세요..." id="contents" th:text="${umm.contents}"></textarea>
+                    <button type="button" th:if="__${umm.id}__ != null" style="width: 100px; float:left; font-size: 12px" class="btn btn-outline-dark" onclick="adminUpdate()">관리자수정</button>
                 </section>
             </article>
         </div>
@@ -124,19 +126,29 @@
             location.replace(`/profile`);
         })
     }
+    function adminUpdate(){
+        let params = new URLSearchParams(location.search);
+        let id = params.get('umm_id');
 
-    // function remove(){
-    //     let params = new URLSearchParams(location.search);
-    //     let id = params.get('umm_id');
-    //
-    //     $.ajax({
-    //         type: "DELETE",
-    //         url: `/umm/${id}`,
-    //         processData: false,
-    //         contentType: false
-    //     }).done(function () {
-    //         alert("삭제 완료")
-    //         location.replace(`/profile`);
-    //     })
-    // }
+        let contents = $('#contents').val();
+
+        let imageInput = document.getElementById('image1');
+        let image = imageInput.files[0];
+        let formData = new FormData();
+        formData.append("contents", contents);
+        if (image !== 'undefined') {
+            formData.append("image", image)
+        }
+        $.ajax({
+            type: "PUT",
+            url: `/admin/umm/${id}`,
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(function () {
+            alert("Umm 수정 완료")
+            location.replace(`/admin`);
+        })
+    }
+
 </script>

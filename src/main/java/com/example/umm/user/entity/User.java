@@ -1,13 +1,13 @@
 package com.example.umm.user.entity;
 
+import com.example.umm.comment.entity.Comment;
 import com.example.umm.follow.entity.Follow;
 import com.example.umm.umm.entity.ReUmm;
+import com.example.umm.umm.entity.Timestamped;
 import com.example.umm.umm.entity.Umm;
-import com.example.umm.user.dto.ProfileRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class User {
+public class User extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,8 @@ public class User {
     private String nickname;
     private String myComment;
     private String myImage;
+    private Long kakaoId;
+    private Long naverId;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -41,6 +43,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<ReUmm> ReUmmList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> CommentList = new ArrayList<>();
 
     public User(String email, String password, String nickname, UserRoleEnum role) {
         this.email=email;
@@ -58,5 +63,32 @@ public class User {
     public void updateProfile(String nickname, String myComment) {
         this.nickname=nickname;
         this.myComment=myComment;
+    }
+
+    public void updatePassword(String password) {
+        this.password=password;
+    }
+
+    public User(String nickname, String encodedPassword, String email, UserRoleEnum role, Long kakaoId, Long naverId) {
+        this.email=email;
+        this.password=encodedPassword;
+        this.nickname=nickname;
+        this.role=role;
+        this.kakaoId=kakaoId;
+        this.naverId=naverId;
+    }
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId=kakaoId;
+        return new User();
+    }
+
+    public User naverIdUpdate(Long naverId) {
+        this.naverId=naverId;
+        return new User();
+    }
+
+    public void updateRole(UserRoleEnum userRoleEnum) {
+        this.role=userRoleEnum;
     }
 }

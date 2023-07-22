@@ -3,9 +3,7 @@ package com.example.umm.user.service;
 import com.example.umm.common.config.AwsS3UpLoader;
 import com.example.umm.security.filter.UserDetailsImpl;
 import com.example.umm.umm.entity.Umm;
-import com.example.umm.user.dto.ProfileRequestDto;
-import com.example.umm.user.dto.ProfileResponseDto;
-import com.example.umm.user.dto.SignupRequestDto;
+import com.example.umm.user.dto.*;
 import com.example.umm.user.entity.User;
 import com.example.umm.user.entity.UserRoleEnum;
 import com.example.umm.user.repository.UserRepository;
@@ -54,11 +52,23 @@ public class UserService  {
             findUser.updateProfile(nickname, myComment,imageUrl);
         } else{
             findUser.updateProfile(nickname, myComment);
-
         }
+    }
 
+    @Transactional
+    public void checkPassword(UserDetailsImpl userDetails, CheckPasswordRequestDto requestDto) {
+        if (!passwordEncoder.matches(requestDto.getPassword(), userDetails.getUser().getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+    }
 
-//        return new ProfileResponseDto(findUser.updateProfile(requestDto));
+    @Transactional
+    public void editPassword(UserDetailsImpl userDetails, EditPasswordRequestDto requestDto) {
+        User user= userRepository.findById(userDetails.getUser().getId()).orElseThrow(()-> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+
+        String password = passwordEncoder.encode(requestDto.getNew_password());
+        user.updatePassword(password);
+
     }
 
     public User findUser(UserDetailsImpl userDetails){

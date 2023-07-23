@@ -76,7 +76,10 @@
                                     <input th:id="'comment'+${comment.id}" style="font-size: 11px; font-weight: 500; color: inherit; border:none" th:value="${comment.comment}">
                                     <button class="btn bnt-black" style="font-size: 2px" th:onclick="updateComment([[${comment.id}]])">수정</button>
                                     <button class="btn bnt-black" style="font-size: 2px" th:onclick="deleteComment([[${comment.id}]])">삭제</button>
+                                    <button class="btn btn-black" style="font-size: 8px" id="commentLike-btn" th:onclick="commentlikeIt([[${comment.id}]])">좋아요</button>
                                 </div>
+                                <label style="font-size: 7px">좋아요 </label>
+                                <label style="font-size: 7px" th:text="${comment.likeItCommentCount}"></label>
                             </div>
                         </div>
 
@@ -123,6 +126,19 @@
         $.ajax({
             type: 'POST',
             url: `/ummLike/`+ummId,
+
+        }).done(function () {
+            alert("좋아요!")
+            location.replace(`/`);
+        })
+    }
+
+    function commentlikeIt(commentId){
+
+
+        $.ajax({
+            type: 'POST',
+            url: `/commentLike/`+commentId,
 
         }).done(function () {
             alert("좋아요!")

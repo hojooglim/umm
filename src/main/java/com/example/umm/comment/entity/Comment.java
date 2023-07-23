@@ -1,6 +1,7 @@
 package com.example.umm.comment.entity;
 
 import com.example.umm.comment.dto.CommentRequestDto;
+import com.example.umm.likeit.entity.LikeIt;
 import com.example.umm.security.filter.UserDetailsImpl;
 import com.example.umm.umm.entity.Umm;
 import com.example.umm.user.entity.User;
@@ -8,6 +9,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +26,8 @@ public class Comment {
     private String comment;
 
 
+    @OneToMany(mappedBy = "comment")
+    private List<LikeIt> likeItList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

@@ -4,8 +4,10 @@ import com.example.umm.common.config.AwsS3UpLoader;
 import com.example.umm.security.filter.UserDetailsImpl;
 import com.example.umm.umm.entity.Umm;
 import com.example.umm.user.dto.*;
+import com.example.umm.user.entity.Password;
 import com.example.umm.user.entity.User;
 import com.example.umm.user.entity.UserRoleEnum;
+import com.example.umm.user.repository.PasswordRepository;
 import com.example.umm.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +28,7 @@ public class UserService  {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AwsS3UpLoader awsS3UpLoader;
+    private final PasswordRepository passwordRepository;
 
     public void signup(SignupRequestDto requestDto) {
         //email 중복 확인
@@ -75,6 +81,40 @@ public class UserService  {
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(()->
                 new NullPointerException("해당 사용자가 존재하지 않습니다."));
         return user;
+    }
+
+
+    @Transactional
+    public void PasswordChecker(EditPasswordRequestDto requestDto, UserDetailsImpl userDetails){
+        //password 확인 패스워드 저장 따로 추가하로 for문 돌려서 일일히 확인
+        //3개중에 맞는게 없어야 변경가능 하도록 조건 주고
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                ()->new NullPointerException("not fount user")
+        );
+        List<Password> userPasswordList = passwordRepository.findAllByUser(user);
+
+        //움 최근 3번이니까 for문 거꾸로 돌려서 3번쨰까지만
+        //size-4하면 오류날꺼같은데
+//        for (int i = userPasswordList.size()-1; i > userPasswordList.size()-4  ; i--) {
+//
+//            if(passwordEncoder.matches(requestDto.getNew_password(), userPasswordList.get(i).toString())){
+//                throw new IllegalArgumentException("last 3 password same");
+//            }
+//        }
+        //콜렉션 써서 돌리고
+        Collections.reverse(userPasswordList); // 54321
+        for (int i = 0; i <3 ; i++) {
+            if(passwordEncoder.matches(requestDto.getNew_password(), userPasswordList.get(i).toString())){
+               throw new IllegalArgumentException("last 3 password same");
+           }
+        }
+
+
+        //변경
+        String encodePassword = passwordEncoder.encode(requestDto.getNew_password());
+        passwordRepository.save(new Password(encodePassword, user));
+        user.updatePassword(encodePassword);
+
     }
 
 }

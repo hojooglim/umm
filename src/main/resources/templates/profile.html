@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>umm</title>
@@ -23,9 +23,12 @@
             border-collapse: collapse;
             text-align: center;
         }
-        th, td {
-            border-bottom: 1px solid #444444;
+        th {
+
             padding: 10px;
+        }
+        td {
+
         }
         *{margin:0; padding:0;}
         a{text-decoration:none;}
@@ -34,7 +37,7 @@
         .btn_open{font-weight:bold; margin:5px; padding:4px 6px; background:white; color:#fff;}
         .pop_wrap{position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.5); font-size:0; text-align:center;}
         .pop_wrap:after{display:inline-block; height:100%; vertical-align:middle; content:'';}
-        .pop_wrap .pop_inner{display:inline-block; padding:20px 30px; background:#fff; width:200px; vertical-align:middle; font-size:15px;}
+        .pop_wrap .pop_inner{display:inline-block; padding:20px 30px; background:#fff; width:400px; vertical-align:middle; font-size:15px;}
     </style>
 </head>
 
@@ -74,11 +77,22 @@
 
             <div id="pop_info_1" class="pop_wrap" style="display:none;">
                 <div class="pop_inner">
-                    <div class="row-6" th:each = "follower : ${profile.followingUserDtoList}">
-                        <img style=" margin-right: 30px; width: 40px;" th:src="${follower.myImage}">
-                        <a style="font-size: 12px; font-weight: 900; color: inherit" th:onclick="|location.href='@{/profile/{user_id}(user_id=${follower.id})}'|" th:text="${follower.nickname}"></a>
-                    </div>
-                    <br>
+                    <table>
+
+                        <tbody>
+                        <tr th:each = "follower : ${profile.followingUserDtoList}">
+                            <td style="font-size: 10px; font-weight: 900; color: inherit">
+                                <img style=" margin-right: 30px; width: 50px;" th:src="${follower.myImage}">
+                            </td>
+                            <td style="font-size: 10px; font-weight: 900; color: inherit">
+                                <a style="font-size: 12px; font-weight: 900; color: inherit" th:onclick="|location.href='@{/profile/{user_id}(user_id=${follower.id})}'|" th:text="${follower.nickname}"></a>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+
+
                     <button type="button"  style="font-size: 10px" class="btn btn-outline-dark">닫기</button>
                 </div>
             </div>

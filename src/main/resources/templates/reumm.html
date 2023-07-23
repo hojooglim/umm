@@ -95,7 +95,9 @@
 
                     <p style="font-size: 11px; font-weight: 500; color: inherit; margin-top: 7px" th:text="${reumm.contents}"></p>
                     <div>
+                        <a th:onclick="|location.href='@{/getUmm?umm_id={umm_id}(umm_id=${reumm.id})}'|">
                         <img style="width:320px;" th:src="${reumm.image}">
+                        </a>
                     </div>
 
                     <div style="margin-top: 7px">
@@ -139,6 +141,8 @@
     <table>
         <tr>
             <td><a href="/" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">home</a>
+            </td>
+            <td><a href="/ummList" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">돋보기</a>
             </td>
             <td><a href="/umm" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">new Umm</a>
             </td>

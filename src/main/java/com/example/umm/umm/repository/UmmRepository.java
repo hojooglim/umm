@@ -15,4 +15,7 @@ public interface UmmRepository extends JpaRepository<Umm,Long> {
             "GROUP BY u.createdAt " +
             "ORDER BY u.createdAt")
     List<DailyUmmCountDTO> getDailyUmmCount();
+
+    List<Umm> findAllByUserId(Long id);
+
 }

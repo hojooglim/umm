@@ -6,7 +6,6 @@ import com.example.umm.comment.entity.ReComment;
 import com.example.umm.comment.repository.CommentRepository;
 import com.example.umm.comment.repository.ReCommentRepository;
 import com.example.umm.security.filter.UserDetailsImpl;
-import com.example.umm.umm.entity.Umm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

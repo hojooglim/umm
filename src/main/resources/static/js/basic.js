@@ -65,7 +65,7 @@ $(document).ready(function () {
                         $("#checkCodeForm").show();
                     } else {
                         alert('이미 등록된 Email 입니다.');
-                        location.replace('/user/introduce');
+                        location.replace('/user/signup-page');
                     }
 
                 });
@@ -78,7 +78,7 @@ $(document).ready(function () {
     if (checkCodeButton) {
         checkCodeButton.addEventListener('click', event => {
 
-            fetch(`/user/mailcompare`, {
+            fetch(`/user/mailCode`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -94,7 +94,7 @@ $(document).ready(function () {
                         $("#submitForm").show();
                     } else {
                         alert('인증코드가 틀렸습니다.');
-                        location.replace('/user/sign-up');
+                        location.replace('/user/signup-page');
                     }
 
                 });

@@ -20,7 +20,7 @@ public class CommentService {
 
     public void createComment(UserDetailsImpl userDetails, CommentRequestDto requestDto, Long ummId) {
         Umm umm = ummRepository.findById(ummId).orElseThrow(() ->
-                new RuntimeException("해당 피드를 찾을 수 없습니다.")
+                new NullPointerException("not found umm")
         );
         commentRepository.save(new Comment(requestDto, userDetails, umm));
     }
@@ -28,7 +28,7 @@ public class CommentService {
     @Transactional
     public void updateComment(UserDetailsImpl userDetails, Long id, CommentRequestDto requestDto) {
         Comment comment = commentRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("없는 댓글입니다.")
+                new NullPointerException("not found comment")
         );
         if (userDetails.getUser().getId().equals(comment.getUser().getId())) {
             comment.update(requestDto);
@@ -37,7 +37,7 @@ public class CommentService {
 
     public void deleteComment(UserDetailsImpl userDetails, Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("없는 댓글입니다.")
+                new NullPointerException("not found comment")
         );
         if (userDetails.getUser().getId().equals(comment.getUser().getId())) {
             commentRepository.delete(comment);

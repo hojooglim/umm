@@ -2,6 +2,7 @@ package com.example.umm.umm.controller;
 
 import com.example.umm.security.filter.UserDetailsImpl;
 import com.example.umm.umm.dto.UmmRequestDto;
+import com.example.umm.umm.dto.UmmResponseDto;
 import com.example.umm.umm.service.UmmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,10 +42,10 @@ public class UmmController {
 
 
 
-//    @GetMapping("/umm/{umm_id}")
-//    public UmmResponseDto getUmm(@PathVariable Long umm_id){
-//       return ummService.getUmm(umm_id);
-//    }
+    @GetMapping("/umm/{umm_id}")
+    public UmmResponseDto getUmm(@PathVariable Long umm_id){
+       return ummService.getUmm(umm_id);
+    }
 
 //    @GetMapping("/umm")
 //    public List<UmmResponseDto> getUmmList(){

@@ -3,6 +3,7 @@ package com.example.umm.security.filter;
 import com.example.umm.security.dto.LoginRequestDto;
 import com.example.umm.security.util.JwtUtil;
 import com.example.umm.user.entity.UserRoleEnum;
+import com.example.umm.user.service.RefreshTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,9 +17,11 @@ import java.io.IOException;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, RefreshTokenService refreshTokenService) {
         this.jwtUtil=jwtUtil;
+        this.refreshTokenService=refreshTokenService;
         setFilterProcessesUrl("/user/login");
     }
 
@@ -38,8 +41,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String email = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getEmail();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
+        String refreshToken = jwtUtil.createRefreshToken();
+
+        refreshTokenService.saveRefreshToken(email, refreshToken);
+
         response.setStatus(201);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(email, role));
+        response.addHeader(JwtUtil.TOKEN_HEADER, refreshToken);
     }
 
     @Override

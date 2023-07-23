@@ -24,12 +24,14 @@ public class JwtUtil {
 
     // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String TOKEN_HEADER = "RefreshToken";
     // 사용자 권한 값의 KEY
     public static final String AUTHORIZATION_KEY = "auth";
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
     // 토큰 만료시간
     private final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
+    private final long RefreshTOKEN_TIME = 1440 * 60 * 7 * 1000L; // 7일
     //ket 암호화
     @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
     private String secretKey;
@@ -52,6 +54,16 @@ public class JwtUtil {
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
+                        .compact();
+    }
+
+    public String createRefreshToken() {
+        Date date = new Date();
+        return BEARER_PREFIX +
+                Jwts.builder()
+                        .setExpiration(new Date(date.getTime() + RefreshTOKEN_TIME))
+                        .setIssuedAt(date)
+                        .signWith(key, signatureAlgorithm)
                         .compact();
     }
 
@@ -96,6 +108,25 @@ public class JwtUtil {
             }
         }
         return null;
+    }
+
+    public String getRefreshTokenFromCookie(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(TOKEN_HEADER)) {
+                    try {
+                        return URLDecoder.decode(cookie.getValue(), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
+                    } catch (UnsupportedEncodingException e) {
+                        return null;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    public String getRefreshTokenFromHeader(HttpServletRequest request) {
+        return request.getHeader(TOKEN_HEADER);
     }
 
     // 토큰에서 사용자 정보 가져오기

@@ -1,6 +1,7 @@
 package com.example.umm.umm.service;
 
 import com.example.umm.common.config.AwsS3UpLoader;
+import com.example.umm.follow.entity.Follow;
 import com.example.umm.security.filter.UserDetailsImpl;
 import com.example.umm.umm.dto.UmmRequestDto;
 import com.example.umm.umm.dto.UmmResponseDto;
@@ -8,7 +9,9 @@ import com.example.umm.umm.entity.ReUmm;
 import com.example.umm.umm.entity.Umm;
 import com.example.umm.umm.repository.ReUmmRepository;
 import com.example.umm.umm.repository.UmmRepository;
+import com.example.umm.user.entity.User;
 import com.example.umm.user.entity.UserRoleEnum;
+import com.example.umm.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,7 @@ public class UmmService {
     private final UmmRepository ummRepository;
     private final ReUmmRepository reUmmRepository;
     private final AwsS3UpLoader awsS3UpLoader;
+    private final UserRepository userRepository;
 
     public void create(UserDetailsImpl userDetails, MultipartFile image, String contents) throws IOException {
         if (image != null) {
@@ -79,15 +83,54 @@ public class UmmService {
         return new UmmResponseDto(umm);
     }
 
-    public List<UmmResponseDto> getUmmList() {
-        List<Umm> ummList = ummRepository.findAllByOrderByCreatedAtDesc();
+    public List<UmmResponseDto> getUmmList(UserDetailsImpl userDetails) {
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                ()-> new NullPointerException("not found user")
+        );
+        List<Follow> followList = user.getFollowList();
+        List<Long> followUserId = new ArrayList<>();
+        for (Follow follow: followList) {
+            followUserId.add(follow.getFollowingUser().getId());
+        }
+        //내가 팔로우 한 사람들 의 아이디
+        //아이디 한개씩 꺼네서.
+        //그 아이디의 umm리스트를 가져옴.
+        //1개 아이디에 여러개의 음 리스트
+
+
         List<UmmResponseDto> ummListDto = new ArrayList<>();
-        for (Umm umm : ummList) {
+
+        for (Long id: followUserId) {
+            List<Umm> ummlist = ummRepository.findAllByUserId(id);
+            for (Umm umm : ummlist){
+                ummListDto.add(new UmmResponseDto(umm));
+            }
+        }
+
+        List<Umm> myUmmList = ummRepository.findAllByUserId(userDetails.getUser().getId());
+
+
+        for (Umm umm : myUmmList) {
             ummListDto.add(new UmmResponseDto(umm));
         }
-        Collections.reverse(ummList);
+        Collections.reverse(ummListDto);
 
         return ummListDto;
+
+    }
+
+    public List<UmmResponseDto> getAllUmmList() {
+        List<Umm> ummList = ummRepository.findAll();
+
+        List<UmmResponseDto> ummDtoList = new ArrayList<>();
+
+        for(Umm umm : ummList){
+            ummDtoList.add(new UmmResponseDto(umm));
+        }
+
+        Collections.reverse(ummDtoList);
+
+        return ummDtoList;
     }
 
     public void reUmm(Long ummId, UserDetailsImpl userDetails) {

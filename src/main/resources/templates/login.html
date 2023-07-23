@@ -129,11 +129,14 @@
         })
             .done(function (res, status, xhr) {
                 const token = xhr.getResponseHeader('Authorization');
+                const refreshtoken = xhr.getResponseHeader('RefreshToken');
 
                 Cookies.set('Authorization', token, {path: '/'})
+                Cookies.set('RefreshToken', refreshtoken, {path: '/'})
 
                 $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
                     jqXHR.setRequestHeader('Authorization', token);
+                    jqXHR.setRequestHeader('RefreshToken', refreshtoken);
                 });
 
                 window.location.href = host;

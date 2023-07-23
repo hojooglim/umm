@@ -1,10 +1,18 @@
 let host = "http://localhost:8080"
 $(document).ready(function () {
     const auth = getToken();
+    const auth2 = getRefreshToken();
 
     if (auth !== undefined && auth !== '') {
         $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
             jqXHR.setRequestHeader('Authorization', auth);
+        });
+
+    }
+
+    if (auth2 !== undefined && auth2 !== '') {
+        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+            jqXHR.setRequestHeader('RefreshToken', auth2);
         });
 
     }
@@ -193,6 +201,14 @@ function getToken() {
     return auth;
 }
 
+function getRefreshToken() {
+    let auth2 = Cookies.get('RefreshToken');
+
+    if(auth2 === undefined) {
+        return '';
+    }
+    return auth2;
+}
 
 
 

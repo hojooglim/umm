@@ -29,7 +29,7 @@
         }
     </style>
 </head>
-<a class="logo" href="/admin" style="font-weight: 10; color: inherit; float: right; font-size: 3px">a</a>
+
 <body style="margin: 30px auto; width: 400px;">
 
 <header class="p-3" style="text-align: center">
@@ -42,7 +42,7 @@
     <div class="d-flex flex-column">
 
         <div class="p-3">
-            <div style="margin-top: 10px; margin-left: 10px" th:each = "umm : ${ummList}">
+            <div style="margin-top: 10px; margin-left: 10px">
                 <input type="hidden" id="umm-id" th:value="${umm.id}">
                 <img  style="width:30px;" th:src="${umm.myImage}">
                 <a style="font-size: 12px; font-weight: 600; color: inherit" th:href ="@{/profile/{user_id}(user_id=${umm.user_id})}"
@@ -53,9 +53,7 @@
 
                     <p style="font-size: 11px; font-weight: 500; color: inherit; margin-top: 7px" th:text="${umm.contents}"></p>
                     <div>
-                        <a th:onclick="|location.href='@{/getUmm?umm_id={umm_id}(umm_id=${umm.id})}'|">
                         <img  style="width:320px;" th:src="${umm.image}">
-                        </a>
                     </div>
 
                     <div style="margin-top: 7px">
@@ -76,10 +74,7 @@
                                     <input th:id="'comment'+${comment.id}" style="font-size: 11px; font-weight: 500; color: inherit; border:none" th:value="${comment.comment}">
                                     <button class="btn bnt-black" style="font-size: 2px" th:onclick="updateComment([[${comment.id}]])">수정</button>
                                     <button class="btn bnt-black" style="font-size: 2px" th:onclick="deleteComment([[${comment.id}]])">삭제</button>
-                                    <button class="btn btn-black" style="font-size: 8px" id="commentLike-btn" th:onclick="commentlikeIt([[${comment.id}]])">좋아요</button>
                                 </div>
-                                <label style="font-size: 7px">좋아요 </label>
-                                <label style="font-size: 7px" th:text="${comment.likeItCommentCount}"></label>
                             </div>
                         </div>
 
@@ -121,7 +116,8 @@
 
     // 좋아요 기능/
     function likeIt(ummId){
-
+        let params = new URLSearchParams(location.search);
+        let id = params.get('umm_id');
 
         $.ajax({
             type: 'POST',
@@ -129,20 +125,7 @@
 
         }).done(function () {
             alert("좋아요!")
-            location.replace(`/`);
-        })
-    }
-
-    function commentlikeIt(commentId){
-
-
-        $.ajax({
-            type: 'POST',
-            url: `/commentLike/`+commentId,
-
-        }).done(function () {
-            alert("좋아요!")
-            location.replace(`/`);
+            location.replace(`/getUmm?umm_id=`+id);
         })
     }
 
@@ -160,7 +143,8 @@
     }
 
     function create(ummId){
-
+        let params = new URLSearchParams(location.search);
+        let id = params.get('umm_id');
         var commentElementId = "comment" + ummId;
         var comment = $('#' + commentElementId).val();
 
@@ -171,12 +155,13 @@
             data: JSON.stringify({ comment: comment }),
         }).done(function () {
             alert("댓글 작성 완료")
-            location.replace(`/`);
+            location.replace(`/getUmm?umm_id=`+id);
         })
     }
 
     function updateComment(commentId){
-
+        let params = new URLSearchParams(location.search);
+        let id = params.get('umm_id');
         var commentElementId = "comment" + commentId;
         var comment = $('#' + commentElementId).val();
 
@@ -187,18 +172,19 @@
             data: JSON.stringify({ comment: comment }),
         }).done(function () {
             alert("댓글 수정 완료")
-            location.replace(`/`);
+            location.replace(`/getUmm?umm_id=`+id);
         })
     }
 
     function deleteComment(commentId){
-
+        let params = new URLSearchParams(location.search);
+        let id = params.get('umm_id');
         $.ajax({
             type: 'Delete',
             url: `/comments/`+commentId,
         }).done(function () {
             alert("댓글 삭제 완료")
-            location.replace(`/`);
+            location.replace(`/getUmm?umm_id=`+id);
         })
     }
 

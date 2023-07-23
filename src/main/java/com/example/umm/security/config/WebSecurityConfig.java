@@ -6,6 +6,7 @@ import com.example.umm.security.filter.JwtAuthorizationFilter;
 import com.example.umm.security.filter.RememberMeService;
 import com.example.umm.security.filter.UserDetailsServiceImpl;
 import com.example.umm.security.util.JwtUtil;
+import com.example.umm.user.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ public class WebSecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final UserDetailsServiceImpl userDetailsService;
     private final RememberMeService rememberMeService;
+    private final RefreshTokenService refreshTokenService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -36,7 +38,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil,refreshTokenService);
         filter.setAuthenticationManager(authenticationConfiguration.getAuthenticationManager());
         return filter;
     }

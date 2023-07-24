@@ -29,8 +29,9 @@ public class User extends Timestamped {
     private String myImage;
     private Long kakaoId;
     private Long naverId;
+    private String email_code;
 
-    @Column(nullable = false)
+    @Column
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
@@ -52,6 +53,11 @@ public class User extends Timestamped {
         this.password=password;
         this.nickname=nickname;
         this.role=role;
+    }
+
+    public User(String email, String ePw) {
+        this.email=email;
+        this.email_code=ePw;
     }
 
     public void updateProfile(String nickname, String myComment, String imageUrl) {

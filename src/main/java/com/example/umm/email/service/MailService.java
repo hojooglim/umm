@@ -4,6 +4,8 @@ package com.example.umm.email.service;
 import com.example.umm.email.dto.CodeDto;
 import com.example.umm.email.entity.Mail;
 import com.example.umm.email.repository.MailRepository;
+import com.example.umm.user.entity.User;
+import com.example.umm.user.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -19,7 +21,7 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class MailService {
-    private final MailRepository mailRepository;
+    private final UserRepository userRepository;
     private final JavaMailSender emailSender;
 
     private String ePw; // 인증번호
@@ -89,15 +91,15 @@ public class MailService {
     // MimeMessage 객체 안에 내가 전송할 메일의 내용을 담는다.
     // 그리고 bean 으로 등록해둔 javaMail 객체를 사용해서 이메일 send!!
     @Transactional
-    public String sendSimpleMessage(String to) throws Exception {
+    public String sendSimpleMessage(String email) throws Exception {
 
         //이메일 중복이 없으면 실행
-        if(!mailRepository.existsByEmail(to)){
+        if(!userRepository.existsByEmail(email)){
             ePw = createKey(); // 랜덤 인증번호 생성
-            Mail mail = new Mail(to, ePw);
+            User user = new User(email, ePw);
 
             // TODO Auto-generated method stub
-            MimeMessage message = createMessage(to); // 메일 발송
+            MimeMessage message = createMessage(email); // 메일 발송
 
             try {// 예외처리
                 emailSender.send(message);
@@ -105,7 +107,7 @@ public class MailService {
                 es.printStackTrace();
                 throw new IllegalArgumentException();
             }
-            mailRepository.save(mail);
+            userRepository.save(user);
             return "인증번호가 전송되었습니다."+ePw;
         }
 
@@ -115,12 +117,13 @@ public class MailService {
 
 
     public String compareCode(CodeDto codeDto){
-        Mail mail = mailRepository.findByEmail(codeDto.getEmail()).orElse(null);
+        User user = userRepository.findByEmail(codeDto.getEmail()).orElse(null);
 
-        if(!codeDto.getCode().equals(mail.getEmail_code())){
+        if(!codeDto.getCode().equals(user.getEmail_code())){
             throw new IllegalArgumentException("인증번호가 일치하지 않습니다.");
         }
         System.out.println("인증완료");
+        userRepository.delete(user);
         return "인증되었습니다.";
     };
 }

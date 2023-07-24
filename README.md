@@ -12,7 +12,8 @@ SNS를 작성하기전에 umm 오늘은 어떤 게시물을 올리지?
 
 # ERD
 
-<img width="893" alt="스크린샷 2023-07-24 오전 2 59 02" src="https://github.com/hojooglim/umm/assets/132051431/bffe5252-7ffe-4183-85a7-f07a1da4b99e">
+<img width="690" alt="스크린샷 2023-07-24 오후 12 29 19" src="https://github.com/hojooglim/umm/assets/132051431/1d04a9bf-8ab6-45c0-8a06-eb30352030b0">
+
 
 # API
 

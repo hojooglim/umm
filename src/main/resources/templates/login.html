@@ -106,6 +106,7 @@
     $(document).ready(function () {
         // 토큰 삭제
         Cookies.remove('Authorization', {path: '/'});
+        Cookies.remove('RefreshToken', {path: '/'});
     });
 
     const href = location.href;

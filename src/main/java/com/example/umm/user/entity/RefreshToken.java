@@ -25,7 +25,7 @@ public class RefreshToken {
         this.refreshToken=refreshToken;
     }
 
-    public void validateSameToken(String refreshToken) {
+    public void update(String refreshToken) {
         this.refreshToken=refreshToken;
     }
 }

@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "GROUP BY u.createdAt " +
             "ORDER BY u.createdAt")
     List<DailySignupCountDTO> getDailySignupCount();
+
+    boolean existsByEmail(String email);
 }

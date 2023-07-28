@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String refreshToken = jwtUtil.createRefreshToken();
 
         refreshTokenService.saveRefreshToken(email, refreshToken);
-
+        getRememberMeServices().loginSuccess(request,response,authResult);
         response.setStatus(201);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(email, role));
         response.addHeader(JwtUtil.TOKEN_HEADER, refreshToken);

@@ -3,6 +3,12 @@ $(document).ready(function () {
     const auth = getToken();
     const auth2 = getRefreshToken();
 
+    const searchButton = document.getElementById('search-btn');
+    $(searchButton).click(function () {
+        var nickname =document.getElementById('nickname').value
+        location.replace(`/ummList/${nickname}`);
+    });
+
     if (auth !== undefined && auth !== '') {
         $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
             jqXHR.setRequestHeader('Authorization', auth);

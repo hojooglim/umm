@@ -36,39 +36,19 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
         String tokenValue = jwtUtil.getTokenFromCookie(req);
-        String refreshValue = jwtUtil.getRefreshTokenFromCookie(req);
-        //refresh token 재발행
+
+
         if (StringUtils.hasText(tokenValue)) {
             tokenValue = jwtUtil.substringToken(tokenValue);
-            refreshValue = jwtUtil.substringToken(refreshValue);
 
-            if (jwtUtil.validateToken(tokenValue)) {
+            if (!jwtUtil.validateToken(tokenValue)) {
+                return;
+            }
 
-                try {
-                    setAuthentication(jwtUtil.getUserInfoFromToken(tokenValue).getSubject());
-                } catch (Exception e) {
-                    return;
-                }
-                
-            } else if (!jwtUtil.validateToken(tokenValue) && refreshValue != null) {
-                try {
-                    String email = jwtUtil.getUserInfoFromToken(tokenValue).getSubject();
-                    Claims userInfo = jwtUtil.getUserInfoFromToken(tokenValue);
-                    UserRoleEnum role = (UserRoleEnum) userInfo.get("auth");
-                    try {
-                        //refreshtoken validationcheck
-                        refreshTokenService.checkToken(refreshValue,email);
-                    } catch (Exception e){
-                        return;
-                    }
-
-                    String newJwtToken = jwtUtil.createToken(email, role);
-
-                    setAuthentication(jwtUtil.getUserInfoFromToken(newJwtToken).getSubject());
-                } catch (Exception e) {
-                    return;
-                }
-                
+            try {
+                setAuthentication(jwtUtil.getUserInfoFromToken(tokenValue).getSubject());
+            } catch (Exception e) {
+                return;
             }
 
         }

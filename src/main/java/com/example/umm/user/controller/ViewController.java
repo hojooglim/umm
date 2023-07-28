@@ -110,4 +110,14 @@ public class ViewController {
         return "block"; // blocked.html을 찾아서 렌더링
     }
 
+    @GetMapping("/ummList/{nickname}")
+    public String searchUser(@PathVariable String nickname, Model model){
+
+        List<ProfileResponseDto>  profileResponseDtoList = userService.searchUser(nickname);
+
+
+        model.addAttribute("profileList", profileResponseDtoList);
+
+        return "ummList";
+    }
 }

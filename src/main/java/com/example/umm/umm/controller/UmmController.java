@@ -45,9 +45,9 @@ public class UmmController {
         return ummService.getUmm(umm_id);
     }
 
-    @GetMapping("/ummScroll/{size}")
-    public List<UmmResponseDto> ummScroll(@PathVariable int size) {
+    @GetMapping("/ummScroll/{size}/{page}")
+    public List<UmmResponseDto> ummScroll(@PathVariable int size, @PathVariable int page) {
         //현재 페이지  * 보여주는 게시물 개수
-        return ummService.getUmmScroll(size);
+        return ummService.getUmmScroll(size, page);
     }
 }

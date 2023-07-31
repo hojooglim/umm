@@ -152,8 +152,8 @@ public class UmmService {
     }
 
 
-    public List<UmmResponseDto> getUmmScroll(int size) {
-        PageRequest pageRequest = PageRequest.of(0, size);
+    public List<UmmResponseDto> getUmmScroll(int size, int page) {
+        PageRequest pageRequest = PageRequest.of(page, size);
         Page<Umm> ummPage = ummRepository.findAll(pageRequest);
         List<Umm> ummList = ummPage.getContent();
         return ummList.stream().map(UmmResponseDto::new).toList();

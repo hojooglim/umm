@@ -83,7 +83,7 @@
                     }
 
                     isLoadingData = true;
-                    fetch(`/ummScroll/${pageSize * currentPage}`)
+                    fetch(`/ummScroll/${pageSize}/${currentPage}`)
                         .then(response => response.json())
                         .then(data => {
                             isLoadingData = false; // 데이터 로딩 완료

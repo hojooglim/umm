@@ -29,6 +29,28 @@
             border-bottom: 1px solid #444444;
             padding: 10px;
         }
+
+        #data-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .data-item {
+            width: 200px; /* 원하는 너비로 조절 */
+            height: 200px; /* 원하는 높이로 조절 */
+            margin: 10px;
+        }
+
+        .data-image {
+            width: 100%; /* 이미지의 너비를 부모 요소에 맞추기 위해 100%로 설정 */
+            height: 100%; /* 이미지의 높이를 부모 요소에 맞추기 위해 100%로 설정 */
+            object-fit: cover; /* 이미지가 비율을 유지하며 부모 요소에 맞도록 설정 */
+        }
+
+        .data-nickname {
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <a class="logo" href="/admin" style="font-weight: 10; color: inherit; float: right; font-size: 3px">a</a>
@@ -44,23 +66,37 @@
     <div class="d-flex flex-column">
 
         <div class="p-3">
+
+
             <div id="data-container">
                 <!-- 데이터를 동적으로 추가할 컨테이너 -->
             </div>
             <script>
                 let currentPage = 1;
                 const pageSize = 3; // 페이지당 데이터 개수
+                let isLoadingData = false;
+                let allDataLoaded = false;
 
                 function fetchData() {
+                    if (isLoadingData || allDataLoaded) {
+                        return; // 이미 데이터 로딩 중이거나 모든 데이터를 불러왔다면 더 이상 실행하지 않음
+                    }
+
+                    isLoadingData = true;
                     fetch(`/ummScroll/${pageSize * currentPage}`)
                         .then(response => response.json())
                         .then(data => {
-                            // 서버에서 받은 데이터를 이용해 화면에 동적으로 추가
-                            appendDataToContainer(data);
+                            isLoadingData = false; // 데이터 로딩 완료
+                            if (data.length === 0) {
+                                allDataLoaded = true; // 모든 데이터를 불러왔음을 표시
+                                return;
+                            }
 
-                            currentPage++; // 다음 페이지로 이동
+                            appendDataToContainer(data);
+                            currentPage++;
                         })
                         .catch(error => {
+                            isLoadingData = false; // 데이터 로딩 실패
                             console.error('Error fetching data:', error);
                         });
                 }
@@ -70,7 +106,23 @@
                     data.forEach(item => {
                         // 데이터를 이용해 적절한 방법으로 컨테이너에 추가
                         const element = document.createElement('div');
-                        element.textContent = item.nickname; // 예시: name 속성을 보여주는 경우
+                        element.className = 'data-item'; // data-item 클래스 추가
+
+                        // 이미지를 보여주기 위해 img 태그 생성
+                        const imageElement = document.createElement('img');
+                        imageElement.className = 'data-image'; // data-image 클래스 추가
+                        imageElement.setAttribute('src', item.image);
+                        imageElement.setAttribute('alt', item.nickname);
+
+                        // 닉네임을 보여주기 위해 span 태그 생성
+                        const nicknameElement = document.createElement('span');
+                        nicknameElement.className = 'data-nickname'; // data-nickname 클래스 추가
+                        nicknameElement.textContent = item.nickname;
+
+                        // div 요소에 이미지와 닉네임 추가
+                        element.appendChild(imageElement);
+                        element.appendChild(nicknameElement);
+
                         dataContainer.appendChild(element);
                     });
                 }

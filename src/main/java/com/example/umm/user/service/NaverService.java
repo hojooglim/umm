@@ -57,8 +57,8 @@ public class NaverService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "Ozcke13trfXHYn3M1Jf1");
-        body.add("client_secret", "w59rCDzBk6");
+        body.add("client_id", "");
+        body.add("client_secret", "");
         body.add("code", code);
         body.add("state", state);
 

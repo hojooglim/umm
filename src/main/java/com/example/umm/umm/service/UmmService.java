@@ -12,27 +12,28 @@ import com.example.umm.user.entity.User;
 import com.example.umm.user.entity.UserRoleEnum;
 import com.example.umm.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UmmService {
+
     private final UmmRepository ummRepository;
     private final ReUmmRepository reUmmRepository;
     private final AwsS3UpLoader awsS3UpLoader;
     private final UserRepository userRepository;
 
-    public void create(UserDetailsImpl userDetails, MultipartFile image, String contents) throws IOException {
+    public void create(UserDetailsImpl userDetails, MultipartFile image, String contents)
+            throws IOException {
         if (image != null) {
             String imageUrl = awsS3UpLoader.upload(image, "image");
             Umm umm = new Umm(userDetails, contents, imageUrl);
@@ -44,7 +45,8 @@ public class UmmService {
     }
 
     @Transactional
-    public void update(Long ummId, UserDetailsImpl userDetails, MultipartFile image, String contents) throws IOException {
+    public void update(Long ummId, UserDetailsImpl userDetails, MultipartFile image,
+            String contents) throws IOException {
         Umm umm = ummRepository.findById(ummId).orElseThrow(
                 () -> new NullPointerException("not found umm")
         );
@@ -98,7 +100,6 @@ public class UmmService {
         //그 아이디의 umm리스트를 가져옴.
         //1개 아이디에 여러개의 음 리스트
 
-
         List<UmmResponseDto> ummListDto = new ArrayList<>();
 
         for (Long id : followUserId) {
@@ -109,7 +110,6 @@ public class UmmService {
         }
 
         List<Umm> myUmmList = ummRepository.findAllByUserId(userDetails.getUser().getId());
-
 
         for (Umm umm : myUmmList) {
             ummListDto.add(new UmmResponseDto(umm));
@@ -141,10 +141,10 @@ public class UmmService {
 
         Optional<ReUmm> reUmm = reUmmRepository.findByUmmAndUser(umm, userDetails.getUser());
         reUmm.ifPresentOrElse(
-                checkreUmm -> { // 게시물과 유저를 통해 좋아요를 이미 누른게 확인이 되면 삭제
+                checkreUmm -> { // 게시물과 유저를 저장했엇으면 지우고
                     reUmmRepository.delete(reUmm.get());
                 },
-                () -> { // 좋아요를 아직 누르지 않았을 땐 추가
+                () -> { // 아직 누르지 않았을 땐 추가
                     reUmmRepository.save(new ReUmm(umm, userDetails));
                 }
         );

@@ -11,6 +11,7 @@ import com.example.umm.user.repository.PasswordRepository;
 import com.example.umm.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.dialect.function.PostgreSQLTruncRoundFunction;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -117,4 +118,12 @@ public class UserService  {
 
     }
 
+    public List<ProfileResponseDto> searchUser(String nickname) {
+
+        if(userRepository.findAllByNicknameContains(nickname).isPresent()){
+            return userRepository.findAllByNicknameContains(nickname).stream().map(ProfileResponseDto::new).toList();
+        }else {
+            return null;
+        }
+    }
 }

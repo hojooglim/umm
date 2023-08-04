@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>umm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+    <script src="/js/basic.js"></script>
+    <style>
+        #footer {
+            position: fixed;
+            background-color: white;
+            left: 300px;
+            right: 300px;
+            bottom: 0;
+            height: 4rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        th, td {
+            border-bottom: 1px solid #444444;
+            padding: 10px;
+        }
+
+        #data-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .data-item {
+            width: 200px; /* 원하는 너비로 조절 */
+            height: 200px; /* 원하는 높이로 조절 */
+            margin: 10px;
+        }
+
+        .data-image {
+            width: 100%; /* 이미지의 너비를 부모 요소에 맞추기 위해 100%로 설정 */
+            height: 100%; /* 이미지의 높이를 부모 요소에 맞추기 위해 100%로 설정 */
+            object-fit: cover; /* 이미지가 비율을 유지하며 부모 요소에 맞도록 설정 */
+        }
+
+        .data-nickname {
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<a class="logo" href="/admin" style="font-weight: 10; color: inherit; float: right; font-size: 3px">a</a>
+<body style="margin: 30px auto; width: 400px;">
+
+<header class="p-3" style="text-align: center">
+    <a class="logo" href="/" style="font-weight: 900; color: inherit">Umm</a>
+
+</header>
+
+<div class="container flex-grow-1 p-0">
+
+    <div class="d-flex flex-column">
+
+        <div class="p-3">
+
+
+            <div id="data-container">
+                <!-- 데이터를 동적으로 추가할 컨테이너 -->
+            </div>
+            <script>
+                let currentPage = 1;
+                const pageSize = 3; // 페이지당 데이터 개수
+                let isLoadingData = false;
+                let allDataLoaded = false;
+
+                function fetchData() {
+                    if (isLoadingData || allDataLoaded) {
+                        return; // 이미 데이터 로딩 중이거나 모든 데이터를 불러왔다면 더 이상 실행하지 않음
+                    }
+
+                    isLoadingData = true;
+                    fetch(`/ummScroll/${pageSize}/${currentPage}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            isLoadingData = false; // 데이터 로딩 완료
+                            if (data.length === 0) {
+                                allDataLoaded = true; // 모든 데이터를 불러왔음을 표시
+                                return;
+                            }
+
+                            appendDataToContainer(data);
+                            currentPage++;
+                        })
+                        .catch(error => {
+                            isLoadingData = false; // 데이터 로딩 실패
+                            console.error('Error fetching data:', error);
+                        });
+                }
+
+                function appendDataToContainer(data) {
+                    const dataContainer = document.getElementById('data-container');
+                    data.forEach(item => {
+                        // 데이터를 이용해 적절한 방법으로 컨테이너에 추가
+                        const element = document.createElement('div');
+                        element.className = 'data-item'; // data-item 클래스 추가
+
+                        // 이미지를 보여주기 위해 img 태그 생성
+                        const imageElement = document.createElement('img');
+                        imageElement.className = 'data-image'; // data-image 클래스 추가
+                        imageElement.setAttribute('src', item.image);
+                        imageElement.setAttribute('alt', item.nickname);
+
+                        // 닉네임을 보여주기 위해 span 태그 생성
+                        const nicknameElement = document.createElement('span');
+                        nicknameElement.className = 'data-nickname'; // data-nickname 클래스 추가
+                        nicknameElement.textContent = item.nickname;
+
+                        // div 요소에 이미지와 닉네임 추가
+                        element.appendChild(imageElement);
+                        element.appendChild(nicknameElement);
+
+                        dataContainer.appendChild(element);
+                    });
+                }
+
+                // 페이지 로드 시 초기 데이터를 가져오고, 스크롤 이벤트를 등록합니다.
+                document.addEventListener('DOMContentLoaded', () => {
+                    fetchData();
+                    window.addEventListener('scroll', () => {
+                        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                            fetchData();
+                        }
+                    });
+                });
+            </script>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="footer">
+    <table>
+        <tr>
+            <td><a href="/" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">home</a>
+            </td>
+            <td><a href="/ummList" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">돋보기</a>
+            </td>
+            <td><a href="/umm" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">new Umm</a>
+            </td>
+            <td><a href="/profile" class="logo" style="font-size: 10px; font-weight: 900; color: inherit">User</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+
+</html>
+
+<script>
+
+    // 좋아요 기능/
+    function likeIt(ummId) {
+
+
+        $.ajax({
+            type: 'POST',
+            url: `/ummLike/` + ummId,
+
+        }).done(function () {
+            alert("좋아요!")
+            location.replace(`/`);
+        })
+    }
+
+    function commentlikeIt(commentId) {
+
+
+        $.ajax({
+            type: 'POST',
+            url: `/commentLike/` + commentId,
+
+        }).done(function () {
+            alert("좋아요!")
+            location.replace(`/`);
+        })
+    }
+
+    // repost 기능
+    function rePost(ummId) {
+
+        $.ajax({
+            type: 'POST',
+            url: `/re-Umm/` + ummId,
+
+        }).done(function () {
+            alert("umm 저장되었음")
+            location.replace(`/reumm`);
+        })
+    }
+
+    function create(ummId) {
+
+        var commentElementId = "comment" + ummId;
+        var comment = $('#' + commentElementId).val();
+
+        $.ajax({
+            type: 'POST',
+            url: `/comments/` + ummId,
+            contentType: 'application/json',
+            data: JSON.stringify({comment: comment}),
+        }).done(function () {
+            alert("댓글 작성 완료")
+            location.replace(`/`);
+        })
+    }
+
+    function updateComment(commentId) {
+
+        var commentElementId = "comment" + commentId;
+        var comment = $('#' + commentElementId).val();
+
+        $.ajax({
+            type: 'PUT',
+            url: `/comments/` + commentId,
+            contentType: 'application/json',
+            data: JSON.stringify({comment: comment}),
+        }).done(function () {
+            alert("댓글 수정 완료")
+            location.replace(`/`);
+        })
+    }
+
+    function deleteComment(commentId) {
+
+        $.ajax({
+            type: 'Delete',
+            url: `/comments/` + commentId,
+        }).done(function () {
+            alert("댓글 삭제 완료")
+            location.replace(`/`);
+        })
+    }
+
+</script>
+
+
+<script type="text/javascript">
+    var bDisplay = true;
+
+    function doDisplay(ummId) {
+        var commentContainerId = `myDIV-${ummId}`;
+        var con = document.getElementById(commentContainerId);
+
+        if (con.style.display == 'none') {
+            con.style.display = 'block';
+        } else {
+            con.style.display = 'none';
+        }
+    }
+</script>

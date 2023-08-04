@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface UmmRepository extends JpaRepository<Umm,Long> {
+public interface UmmRepository extends JpaRepository<Umm, Long> {
     List<Umm> findAllByOrderByCreatedAtDesc();
 
     @Query("SELECT NEW com.example.umm.user.dto.DailyUmmCountDTO(u.createdAt, COUNT(u)) " +

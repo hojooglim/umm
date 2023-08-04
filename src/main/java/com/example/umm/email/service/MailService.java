@@ -2,8 +2,6 @@ package com.example.umm.email.service;
 
 
 import com.example.umm.email.dto.CodeDto;
-import com.example.umm.email.entity.Mail;
-import com.example.umm.email.repository.MailRepository;
 import com.example.umm.user.entity.User;
 import com.example.umm.user.repository.UserRepository;
 import jakarta.mail.MessagingException;

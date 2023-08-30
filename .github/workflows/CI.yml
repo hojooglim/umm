@@ -27,10 +27,12 @@ jobs:
         java-version: '17'
 
     - name: yml 파일 생성
-    - run: touch ./src/main/resources/application.properties
-    - run: echo "${{ secrets.SECRET }}" > ./src/main/resources/application.properties
-    - run: cat ./src/main/resources/application.properties
-      
+      run: |
+          touch ./src/main/resources/application.properties
+          echo "${{ secrets.SECRET }}" > ./src/main/resources/application.properties
+          cat ./src/main/resources/application.properties
+    
+    
       
     #step의 이름을 지정
     - name: Build with Gradle

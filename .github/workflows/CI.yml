@@ -11,6 +11,9 @@ on:
   push:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,7 +25,16 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: '17'
-        
+
+    - name: yml 파일 생성
+      run: |
+        cd ./src/main
+        mkdir resources
+        cd resources
+        touch ./application.properties
+        echo "${{ secrets.SECRET }}" > ./application.properties
+      shell: bash   
+      
     #step의 이름을 지정
     - name: Build with Gradle
       run: chmod +x gradlew

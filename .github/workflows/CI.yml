@@ -11,9 +11,6 @@ on:
   push:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,6 +26,8 @@ jobs:
     #step의 이름을 지정
     - name: Build with Gradle
       run: chmod +x gradlew
+      shell: bash
 
     - name: Build with Gradle
-      run: ./gradlew clean build
+      run: ./gradlew build
+      shell: bash
